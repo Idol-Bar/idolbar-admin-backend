@@ -40,8 +40,8 @@ def create_app():
     app.include_router(auth.router)
     #app.include_router(posts.router,dependencies=[Depends(AdminHandler)])
     
-    #app.mount("/public", StaticFiles(directory="dist"), name="public")
-    #app.mount("/assets", StaticFiles(directory="dist/assets"), name="assets")
+    app.mount("/public", StaticFiles(directory="dist"), name="public")
+    app.mount("/assets", StaticFiles(directory="dist/assets"), name="assets")
 
     @app.get("/{full_path:path}")
     def getSPA():
@@ -53,10 +53,28 @@ def create_app():
     async def startup_event():
         user_data = [
             {
-                "username": "royaltrip",
-                "password": "royaltrip",
+                "username": "ibaradmin",
+                "password": "ibaradmin",
                 "role": "admin",
                 "email": "admin@gmail.com",
+            },
+            {
+                "username": "ibarmanager1",
+                "password": "ibarmanager1",
+                "role": "shop1",
+                "email": "ibarmanager1@gmail.com",
+            },
+            {
+                "username": "ibarmanager2",
+                "password": "ibarmanager2",
+                "role": "shop2",
+                "email": "ibarmanager2@gmail.com",
+            },
+            {
+                "username": "ibarcasher",
+                "password": "ibarcasher",
+                "role": "casher",
+                "email": "casher@gmail.com",
             }
         ]
         db = SessionLocal()

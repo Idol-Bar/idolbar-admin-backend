@@ -35,4 +35,4 @@ def download_file(name_file: str):
     try:
         return FileResponse(path=getcwd() + "/uploads/" + name_file, media_type='application/octet-stream', filename=name_file)
     except:
-        return "https://alodawpyei.com/images/main/logo280-280.png"
+        return ""
