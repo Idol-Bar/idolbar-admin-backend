@@ -53,3 +53,57 @@ class LoginSchema(BaseModel):
         orm_mode = True
 
 ##MemberSchema
+
+class MemberSchema(OrmBase):
+    username: str
+    password: str
+    createdate: datetime
+    active: Optional[bool] = False
+    role: List[RoleSchema]
+    postImage: Optional[List] = []
+
+    class Config:
+        orm_mode = True
+
+"""class MemberSchemaResponse(BaseModel):
+    member: List[MemberSchema]"""
+
+class ProfileSchema(OrmBase):
+    username: str
+    createdate: datetime
+    active: Optional[bool] = False
+    role: List[RoleSchema]
+    postImage: Optional[List] = []
+
+    class Config:
+        orm_mode = True
+
+class SelectPasswordSchema(BaseModel):
+    id:int
+    username:str
+    class Config:
+        orm_mode = True
+
+class PasswordSchema(BaseModel):
+    username:Optional[str]
+    old_password:Optional[str]
+    new_password:Optional[str]
+    confirm_password:Optional[str]
+    class Config:
+        orm_mode = True
+
+class UpdatePasswordSchema(BaseModel):
+    updatePassword:PasswordSchema
+
+class CreateMemberSchema(BaseModel):
+    username: str
+    password: str
+    role: str
+    active: Optional[bool] = False
+    postImage: Optional[List] = []
+
+    class Config:
+        orm_mode = True
+
+class CreateMemberSchemaRequest(BaseModel):
+    member: CreateMemberSchema
