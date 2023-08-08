@@ -107,3 +107,62 @@ class CreateMemberSchema(BaseModel):
 
 class CreateMemberSchemaRequest(BaseModel):
     member: CreateMemberSchema
+
+
+###Client Schema
+
+class TierSchema(OrmBase):
+    name: str
+
+class ClientSchema(OrmBase):
+    username: str
+    birthday: str
+    createdate: datetime
+    phoneno: str
+    status: bool
+    active: Optional[bool] = False
+    tier: List[TierSchema]  = []
+ 
+    postImage: Optional[List] = []
+
+    class Config:
+        orm_mode = True
+
+class MetaSchema(OrmBase):
+    id: Optional[int] =  1
+    total_pages: int
+    page: Optional[int] =  1
+   
+class ClientSchemaWithMeta(BaseModel):
+    client: List[ClientSchema] = []
+    meta : MetaSchema
+
+
+###Tier Rule Schema
+
+class TierRuleSchema(OrmBase):
+    name: str
+    lower: int
+    higher: int
+    percentage: int
+    description: str
+    postImage: Optional[List] = []
+    createdate: datetime
+    
+    class Config:
+        orm_mode = True
+
+class CreateTierRuleSchema(OrmBase):
+    id: Optional[int]
+    name: str
+    lower: int
+    higher: int
+    percentage: int
+    description: str
+    postImage: Optional[List] = []
+
+    class Config:
+        orm_mode = True
+
+class CreateTierRuleSchemaRequest(BaseModel):
+    tierRule: CreateTierRuleSchema

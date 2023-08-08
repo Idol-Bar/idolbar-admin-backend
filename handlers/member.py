@@ -12,18 +12,23 @@ from models.model import User, Role
 from sqlalchemy.orm import Session
 from modules.dependency import get_current_user
 from modules.token import AuthToken
-
+from modules.utils import pagination
+from sqlalchemy import desc
 router = APIRouter()
 auth_handler = AuthToken()
 
 
-@router.get("/members", tags=["member"], response_model=Dict[str,List[MemberSchema]])
+@router.get("/members", tags=["member"])
 async def get_member(
+    page: int = 1 , per_page: int=10,
     db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
 ):
     #members = db.query(User).all()
-    members = db.query(User).join(Role, User.role).all()
-    return {"member":members}
+    count = db.query(User).count()
+    meta_data =  pagination(page,per_page,count)
+    members = db.query(User).join(Role, User.role).order_by(desc(User.createdate)).limit(per_page).offset((page - 1) * per_page).all()
+    return {"member":members,"meta":meta_data}
+
 
 @router.get("/members/{id}", tags=["member"], response_model=Dict[str,MemberSchema])
 def get_member_byid(id: int, db: Session = Depends(get_db)):
@@ -74,3 +79,4 @@ async def update_member(id: int, member: CreateMemberSchemaRequest,db: Session =
     db.commit()
     db.refresh(db_member)
     return {"member":db_member}
+
