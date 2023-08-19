@@ -166,3 +166,9 @@ class CreateTierRuleSchema(OrmBase):
 
 class CreateTierRuleSchemaRequest(BaseModel):
     tierRule: CreateTierRuleSchema
+
+### Point Schema 
+
+class AddPointSchema(OrmBase):
+    userId: int
+    unit: int

@@ -24,11 +24,11 @@ def create_app():
     )
 
     from modules.dependency import AuthHandler
-    from handlers import login, auth, upload,member,profile,client,tier
+    from handlers import login, auth, upload,member,profile,client,tier,point
     from handlers.database import SessionLocal, engine
     #import models.model as app_model
     import handlers.database as app_model
-    from models.model import User, Role
+    from models.model import User, Role,EndUser,Tier
 
     app_model.Base.metadata.create_all(bind=engine)
     logging.basicConfig(
@@ -42,6 +42,7 @@ def create_app():
     app.include_router(profile.router)
     app.include_router(client.router)
     app.include_router(tier.router)
+    app.include_router(point.router)
     #app.include_router(posts.router,dependencies=[Depends(AdminHandler)])
     
     app.mount("/public", StaticFiles(directory="dist"), name="public")
@@ -103,7 +104,21 @@ def create_app():
                     + user["role"]
                 )
         logger.info("Database Startup Complete")
-
+        
+        end_user_data = [{"username":"ppk","phoneno":"098737838"},{"username":"lma","phoneno":"09172838843"}]
+        for end_user_data in end_user_data:
+            is_user = db.query(EndUser).filter(EndUser.username == end_user_data["username"]).first()
+            if not is_user:
+                tier = Tier(name="gold")
+                db_end_user = EndUser(username=end_user_data["username"],birthday=datetime.datetime.now(),phoneno=end_user_data["phoneno"],status=True,active=True,tier=[tier])
+                db.add(db_end_user)
+                db.add(tier)
+                db.commit()
+            else:
+                logger.info(
+                    end_user_data["username"]
+                    + " Already Exists with in EndUser "
+                )
     return app
 
 
