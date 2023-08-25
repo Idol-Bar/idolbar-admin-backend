@@ -11,12 +11,10 @@ public
 bin/
 build/
 develop-eggs/
-dist/
 eggs/
 lib/
 lib64/
 parts/
-sdist/
 var/
 *.egg-info/
 .installed.cfg
@@ -53,4 +51,3 @@ docs/_build/
 
 .DS_Store
 node_modules
-dist/

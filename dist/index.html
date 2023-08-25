@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>IDOLBar Admin</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+<meta name="idolbar-admin-frontend/config/environment" content="%7B%22modulePrefix%22%3A%22idolbar-admin-frontend%22%2C%22environment%22%3A%22production%22%2C%22rootURL%22%3A%22%2F%22%2C%22locationType%22%3A%22history%22%2C%22localHost%22%3A%22http%3A%2F%2Flocalhost%3A8000%22%2C%22remoteHost%22%3A%22https%3A%2F%2Fidolbaradmin.nobletechitsolutions.com%22%2C%22EmberENV%22%3A%7B%22FEATURES%22%3A%7B%7D%2C%22_APPLICATION_TEMPLATE_WRAPPER%22%3Afalse%2C%22_DEFAULT_ASYNC_OBSERVERS%22%3Atrue%2C%22_JQUERY_INTEGRATION%22%3Afalse%2C%22_TEMPLATE_ONLY_GLIMMER_COMPONENTS%22%3Atrue%7D%2C%22APP%22%3A%7B%22name%22%3A%22idolbar-admin-frontend%22%2C%22version%22%3A%220.0.0%2Befe63eaf%22%7D%2C%22ember-simple-auth-token%22%3A%7B%22authorizationHeaderName%22%3A%22Authorization%22%2C%22authorizationPrefix%22%3A%22Bearer%20%22%2C%22serverTokenRefreshEndpoint%22%3A%22%2Frefresh_token%22%2C%22refreshTokenPropertyName%22%3A%22refresh_token%22%2C%22serverTokenEndpoint%22%3A%22%2Flogin%22%2C%22tokenPropertyName%22%3A%22access_token%22%2C%22refreshAccessTokens%22%3Atrue%2C%22refreshLeeway%22%3A300%7D%2C%22ember-simple-auth%22%3A%7B%22authenticationRoute%22%3A%22login%22%2C%22routeAfterAuthentication%22%3A%22home%22%2C%22routeIfAlreadyAuthenticated%22%3A%22home%22%7D%2C%22ember-paper%22%3A%7B%22insertFontLinks%22%3Atrue%7D%2C%22exportApplicationGlobal%22%3Afalse%2C%22emberInitials%22%3A%7B%22image%22%3A%7B%22defaultImageUrl%22%3A%22%22%7D%2C%22gravatar%22%3A%7B%22defaultImageUrl%22%3A%22%22%7D%7D%2C%22ember-modal-dialog%22%3A%7B%7D%7D" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic"> <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <link integrity="" rel="stylesheet" href="/assets/vendor-a4292bba906a0d6b500a84b1c00bd333.css">
+    <link integrity="" rel="stylesheet" href="/assets/idolbar-admin-frontend-7891693418e0acbc91b7bf19db24487c.css">
+    <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
+    <!-- third party css -->
+    <link href="/assets/css/vendor/jquery-jvectormap-1.2.2-edb11bb832ea8eaccedd306de553e793.css" rel="stylesheet" type="text/css" integrity="sha256-M0zdviSIsCxwIIcnLKrpa8ztpyMWtAvYjCe59vKnbhM= sha512-8sDFKa6apUkrNvowDuZVKGrJYRsQ2Kus7bwS3auB40f95wHpyopmJW78H1lf7O7V6aFZu0Pi9drON3RXAbKb+w==" />
+    <!-- third party css end -->
+    <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
+    <!-- App css -->
+    <link href="/assets/css/icons.min-e5587dc5152acf4b6f4c08c1d8c56310.css" rel="stylesheet" type="text/css" integrity="sha256-+ESUmhsPEBqv8JBUJkoj+wO+x7PIoBY7wPY7Vxsekb8= sha512-hQk7/C+kZQiiF7H9Ek+WCn93ReWBFf35zSOZdCVsHuB0bpNpVqKL6Drj7KHYZUq7stlct64ZKdVfgsLnnxpbnw==" />
+    <link href="/assets/css/app.min-8b039064e58e84d80dba4fa158463a64.css" rel="stylesheet" type="text/css" id="light-style" integrity="sha256-XRnxAF0Z4VMPkFZikaTK6I4Q3IA3VKTk5pWkKVILxnA= sha512-OmMWfC//1IVUwX8zgGyQGuKF0SuUOWpkh1Su0btudXewPqxsas1N85jnSBlHNuTTpwFwK2DdxawxUFY9OUHHKg==" />
+    <link href="/assets/css/app-dark.min-e18fc8c936e481d579e9760a491cfc18.css" rel="stylesheet" type="text/css" id="dark-style" integrity="sha256-Kyf337Twfju0te0rXAVkFvi5GS0vk3egDd69IKMUiNk= sha512-NOAwpIirOKJNoakw1f+2dyqMMhwnvHt5GPNsCk2ZUFgO/rMNRLXSRsNh8d4hlX622xMrBjYr9GC0IBVi3fq2qQ==" />
+
+    
+  </head>
+  <body>
+    
+
+    <script src="/assets/vendor-515d690f783b312f3726e46740d07544.js" integrity="sha256-+i2XjxpejazMguK4VOtwANWb2pi0PHgyu2k/7eQeQCE= sha512-qQcoKqidOIGkS2nmQ9pwcsS8DYgamoJM/KxrTtjq0wbqMjKZfQORvO4+QKzeor1GgglzSBnGuUeVJehxdfKz5g==" ></script>
+    <script src="/assets/idolbar-admin-frontend-b7d66967b62f93ce8944da51b5bf029a.js" integrity="sha256-2uv51Ey2oiD2WmrUph6j9qcTLuffTe3Wt+ddJoRgnag= sha512-LwO2GXq2heJX+iTZtM8/fx/Oay4bUGgQV25B8Bi0nHjMUP5MDHkoYeb9uYX/L3MFA4blQx2R6IPXRGikI0HJ8Q==" ></script>
+
+    <script src="/assets/js/vendor.min-185f0b10ca4037804001aba8fd04515b.js" integrity="sha256-biky5tN1XzSvCN0JwGr7LLSN4qD2RXQDSe93XFyKVz4= sha512-RYiPmgMVPf0nXcP08M5y8EbGv478jFiSLDCeUUhJm5//fw8qKWyuKasLYw6DdxgvpYnvNII6XbJGdsXN6sQlyw==" ></script>
+    <script src="/assets/js/app.min-34550a3dc682831f07bf0c20a2c5b694.js" integrity="sha256-NR3HjKPWlKok+O6sNC2wYdOkCiUz+xMSD8DEa+pwiBM= sha512-hXg5x9BAGLOt3QYLOuKACw+z1MxvjncVxmVDSJ1sThSxVIV7DExVMRrysytSsgbLaRP+nMWrIZHDQSovU+47NQ==" ></script>
+
+    <!-- third party js -->
+    <!-- <script src="/assets/js/vendor/apexcharts.min-add0d4886b296849b3d7741fb28f0b4b.js" integrity="sha256-qBvvgYqY18iHkKDyFg9Hqr+uMbkulADkbiguGKfEAIw= sha512-9L98NQz08f1O2yDZyfGaL91yeAJ6VXITODm4HCCTZa9eKU0tfWyGT5rhQYg9vwEdlhk+uUYG58wJdYpUT0oTbg==" ></script> -->
+    <script src="/assets/js/vendor/jquery-jvectormap-1.2.2.min-a966a364a42cf291adbeeefa3d193405.js" integrity="sha256-kfG1OSGaKW44WG+VepEk+mkJNFl/ZF5HC4sYHA98AZI= sha512-EAmmivIy79no2AmfN1dxhiOgOSTnnKsQTIj2sompwGegEuTYx7Mkil8cbvLGR7MfoNJeoSHQfgjWUaTZDRxHbg==" ></script>
+    <script src="/assets/js/vendor/jquery-jvectormap-world-mill-en-5f465bcacd899838c42ce637a911caa5.js" integrity="sha256-lQba6znjFGdSjsSIGjnT4g8N/xv47DipQXB/co5eC94= sha512-Si9dcBfKfNx/GrNrn41nFnqVXKD5+vjzYHqWfQod42wYFfGCzhJLOkkQbl4gjDfTEwQ8kXZU2Ab7CsVrxA6zSg==" ></script>
+    <!-- third party js ends -->
+
+    <!-- demo app -->
+    <script src="/assets/js/pages/demo.dashboard-9cae26e54f813f1ac624472c25288b54.js" integrity="sha256-ZKgyc4RflL9NyW1YRXixUB2QAShenROnbcRBPzupU/Q= sha512-Ienmqkt9OSbyqPnMqRFMDMdv+DUVTvBS45MMg/TYQo/jsOJ5BkrQ7UPTnylfxnzEpooo1xsCuJmuY7VVM/10PQ==" ></script>
+    <!-- end demo js-->
+
+    
+          <div id="ember-basic-dropdown-wormhole"></div>
+          <div id="paper-wormhole"></div>
+          <div id="paper-toast-fab-wormhole"></div>
+        
+  </body>
+</html>
