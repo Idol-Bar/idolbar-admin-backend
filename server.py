@@ -105,20 +105,20 @@ def create_app():
                 )
         logger.info("Database Startup Complete")
         
-        end_user_data = [{"username":"ppk","phoneno":"098737838"},{"username":"lma","phoneno":"09172838843"}]
-        for end_user_data in end_user_data:
-            is_user = db.query(EndUser).filter(EndUser.username == end_user_data["username"]).first()
-            if not is_user:
-                tier = Tier(name="gold")
-                db_end_user = EndUser(username=end_user_data["username"],birthday=datetime.datetime.now(),phoneno=end_user_data["phoneno"],status=True,active=True,tier=[tier])
-                db.add(db_end_user)
-                db.add(tier)
-                db.commit()
-            else:
-                logger.info(
-                    end_user_data["username"]
-                    + " Already Exists with in EndUser "
-                )
+        # end_user_data = [{"username":"ppk","phoneno":"098737838"},{"username":"lma","phoneno":"09172838843"}]
+        # for end_user_data in end_user_data:
+        #     is_user = db.query(EndUser).filter(EndUser.username == end_user_data["username"]).first()
+        #     if not is_user:
+        #         tier = Tier(name="gold")
+        #         db_end_user = EndUser(username=end_user_data["username"],birthday=datetime.datetime.now(),phoneno=end_user_data["phoneno"],status=True,active=True,tier=[tier])
+        #         db.add(db_end_user)
+        #         db.add(tier)
+        #         db.commit()
+        #     else:
+        #         logger.info(
+        #             end_user_data["username"]
+        #             + " Already Exists with in EndUser "
+        #         )
     return app
 
 

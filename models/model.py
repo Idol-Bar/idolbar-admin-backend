@@ -95,3 +95,10 @@ class TierRule(Base):
     postImage = Column(ARRAY(JSON), nullable=True)
     createdate = Column(DateTime, default=datetime.datetime.now)
 
+class Money(Base):
+    __tablename__ = 'money'
+    id = Column(Integer, primary_key=True)
+    amount = Column(Integer, nullable=False)
+    user_id = Column(String, nullable=False)
+    createdate = Column(DateTime, default=datetime.datetime.now)
+    status = Column(String, nullable=False)
