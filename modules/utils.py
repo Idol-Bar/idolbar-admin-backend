@@ -8,3 +8,6 @@ def pagination(page,per_page,item_count):
         return {"total_pages": total_pages,"page":int(page)+1}
     except:
         return {}
+import math
+def calc_percent(amount, percentage):
+    return int(math.ceil((amount * percentage) / 100))
