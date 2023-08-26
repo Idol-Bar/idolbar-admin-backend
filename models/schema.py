@@ -170,5 +170,6 @@ class CreateTierRuleSchemaRequest(BaseModel):
 ### Point Schema 
 
 class AddPointSchema(OrmBase):
+    id: Optional[int]
     userId: int
     unit: int
