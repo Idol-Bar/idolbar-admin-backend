@@ -12,7 +12,7 @@ from sqlalchemy.orm import Session
 from modules.dependency import get_current_user
 from modules.token import AuthToken
 from modules.utils import pagination
-from sqlalchemy import desc
+from sqlalchemy import desc,func
 from modules.utils import calc_percent
 router = APIRouter()
 auth_handler = AuthToken()
@@ -53,7 +53,17 @@ async def add_point(
     money_log = Money(amount=point_info.amount,user_id=point_info.userId,status=f"pay {point_info.amount} MMK with {point_info.unit} Point")
     db.add(money_log)
     db.commit()
-    return {"amount":point_info.amount,"percentage":percent,"tier":tier.name}
+    logger.info("Update Tier")
+    total_amount = db.query(func.sum(Money.amount)).filter(Money.user_id == f"{point_info.userId}").scalar()
+    rule = db.query(TierRule).filter(TierRule.lower <= total_amount, TierRule.higher >= total_amount).first()
+    if rule and rule.name!=tier.name:
+        owner = db.query(EndUser).get(point_info.userId)
+        role = Role(name=rule.name)
+        owner.role = [role]
+        db.commit()
+        db.refresh(owner)
+        logger.info("Update Tier User Table")
+    return {"amount":point_info.amount,"percentage":percent,"tier":tier.name,"total":total_amount}
 
 
 
