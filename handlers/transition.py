@@ -40,3 +40,11 @@ async def get_transition(
     meta_data =  pagination(page,per_page,count)
     transition = db.query(PointLogs).filter(PointLogs.status=="Share").order_by(desc(PointLogs.createdate)).limit(per_page).offset((page - 1) * per_page).all()
     return {"sharept":transition,"meta":meta_data}
+
+
+@router.get("/searchtransitions", tags=["transition"])
+def search_client(phoneno: str = None, db: Session = Depends(get_db)):
+    if not phoneno or not len(phoneno)>0:
+        return {"searchclient":[]}
+    transition = db.query(PointLogs).filter(PointLogs.phoneno.contains(phoneno)).all()
+    return {"searchtransition":transition}
