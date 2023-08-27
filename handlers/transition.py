@@ -28,3 +28,15 @@ async def get_transition(
     meta_data =  pagination(page,per_page,count)
     transition = db.query(PointLogs).order_by(desc(PointLogs.createdate)).limit(per_page).offset((page - 1) * per_page).all()
     return {"transition":transition,"meta":meta_data}
+
+
+@router.get("/sharepts", tags=["transition"])
+async def get_transition(
+    page: int = 1 , per_page: int=10,
+    db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
+):
+    #members = db.query(User).all()
+    count = db.query(PointLogs).count()
+    meta_data =  pagination(page,per_page,count)
+    transition = db.query(PointLogs).filter(PointLogs.status=="Share").order_by(desc(PointLogs.createdate)).limit(per_page).offset((page - 1) * per_page).all()
+    return {"sharept":transition,"meta":meta_data}
