@@ -26,5 +26,5 @@ async def get_transition(
     #members = db.query(User).all()
     count = db.query(PointLogs).count()
     meta_data =  pagination(page,per_page,count)
-    transition = db.query(PointLogs).join(Role, User.role).order_by(desc(PointLogs.createdate)).limit(per_page).offset((page - 1) * per_page).all()
+    transition = db.query(PointLogs).order_by(desc(PointLogs.createdate)).limit(per_page).offset((page - 1) * per_page).all()
     return {"transition":transition,"meta":meta_data}
