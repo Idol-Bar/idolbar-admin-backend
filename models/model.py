@@ -102,3 +102,17 @@ class Money(Base):
     user_id = Column(String, nullable=False)
     createdate = Column(DateTime, default=datetime.datetime.now)
     status = Column(String, nullable=False)
+
+class PointLogs(Base):
+    __tablename__ = 'pointlogs'
+    id = Column(Integer, primary_key=True)
+    amount = Column(Integer, nullable=False)
+    point = Column(Integer, nullable=False)
+    tier = Column(String, nullable=False)
+    username = Column(String, unique=False, nullable=True)
+    phoneno = Column(String, unique=False, nullable=True)
+    fromUser = Column(String, nullable=True)
+    toUser = Column(String, nullable=True)
+    createdate = Column(DateTime, default=datetime.datetime.now)
+    status = Column(String, nullable=False)
+    info = Column(ARRAY(JSON), nullable=True)

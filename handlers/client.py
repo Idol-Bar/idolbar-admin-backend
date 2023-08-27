@@ -8,7 +8,7 @@ from models.schema import (
 )
 from typing import List, Dict
 from .database import get_db
-from models.model import EndUser, Tier
+from models.model import EndUser, Tier,Point
 from sqlalchemy.orm import Session
 from modules.dependency import get_current_user
 from modules.token import AuthToken
@@ -37,3 +37,21 @@ def get_client_byid(id: int, db: Session = Depends(get_db)):
 
 
 
+@router.get("/getpoint/{id}", tags=["client"])
+def get_point_byid(id: int, db: Session = Depends(get_db)):
+    owner_points_count = db.query(Point).filter(Point.owner_id == id).all()
+    return {"total_point":len(owner_points_count)}
+
+# @router.get("/searchclients", tags=["client"])
+# async def search_all(
+#     page: int = 1 , per_page: int=10,
+#     db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
+# ):
+#     return {"searchclients":[]}
+
+@router.get("/searchclients", tags=["client"])
+def search_client(phoneno: str = None, db: Session = Depends(get_db)):
+    if not phoneno or not len(phoneno)>0:
+        return {"searchclient":[]}
+    client = db.query(EndUser).filter(EndUser.phoneno.contains(phoneno)).all()
+    return {"searchclient":client}

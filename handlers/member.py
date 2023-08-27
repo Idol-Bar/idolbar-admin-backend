@@ -8,7 +8,7 @@ from models.schema import (
 )
 from typing import List, Dict
 from .database import get_db
-from models.model import User, Role
+from models.model import User, Role,Point
 from sqlalchemy.orm import Session
 from modules.dependency import get_current_user
 from modules.token import AuthToken
