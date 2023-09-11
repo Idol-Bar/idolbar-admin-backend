@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import datetime, date,time
 from uuid import uuid4, UUID
 from typing import List, Optional, Any
 from pydantic import BaseModel, validator,Field
@@ -174,3 +174,48 @@ class AddPointSchema(OrmBase):
     userId: int
     unit: int
     amount:Optional[int]=0
+
+### Reservation
+class CreateTableSchema(OrmBase):
+    id: Optional[int]
+    name: str
+    reservedate: date
+
+class CreateTableSchemaRequest(BaseModel):
+    restable: CreateTableSchema
+
+class TablesSchema(OrmBase):
+    name: str
+    reservedate: date
+    createdate: datetime
+
+class ReserveSchema(OrmBase):
+    username: str
+    phoneno: str
+    createdate: datetime
+    reservedate: date
+    reservetime: time
+    description: str
+    status: bool
+    active: Optional[bool] = False
+    tables: List[TablesSchema]  = []
+
+    class Config:
+        orm_mode = True
+
+class CreateReserveSchema(OrmBase):
+    id: Optional[int]
+    username: str
+    phoneno: str
+    reservedate: date
+    reservetime: time
+    description: str
+    status: Optional[bool] = True
+    active: Optional[bool] = True
+    tables: List
+
+    class Config:
+        orm_mode = True
+
+class CreateReserveSchemaRequest(BaseModel):
+    reservation: CreateReserveSchema
