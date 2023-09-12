@@ -130,12 +130,13 @@ class Reservation(Base):
     description = Column(String, nullable=False)
     status = Column(String, nullable=False)
     active = Column(Boolean, unique=False, default=True)
-    tables = relationship('Tables', back_populates='reservation')
+    tables = relationship('Tables', back_populates='reservation', cascade='all, delete-orphan')
 
 class Tables(Base):
     __tablename__ = 'tables'
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=False, nullable=True)
+    shop = Column(String, nullable=False)
     reservation_id = Column(Integer, ForeignKey('reservation.id'))  # Define a foreign key
     reservedate = Column(Date, nullable=False)
     reservation = relationship('Reservation', back_populates='tables')

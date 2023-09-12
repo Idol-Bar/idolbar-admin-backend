@@ -15,9 +15,11 @@ from sqlalchemy.orm import Session
 from modules.dependency import get_current_user
 from modules.token import AuthToken
 from modules.utils import pagination
-from sqlalchemy import desc,func
+from sqlalchemy import desc,func,text
 from datetime import datetime, date
 from uuid import uuid4
+from pydantic import parse_obj_as
+import json
 router = APIRouter()
 auth_handler = AuthToken()
 
@@ -45,23 +47,47 @@ async def add_reservation(
     is_reserved = db.query(Reservation).join(Tables, Reservation.tables).filter(func.date(Reservation.reservedate) == data.reservedate,Tables.name==data.tables[0]).first()
     if is_reserved:
         raise HTTPException(status_code=400, detail="Reservation already registered.")
-    tables = Tables(name=data.tables[0],reservedate=data.reservedate)
+    tables = Tables(name=data.tables[0],reservedate=data.reservedate,shop=data.shop)
     order = Reservation(username=data.username, phoneno=data.phoneno,reservedate=data.reservedate,reservetime=data.reservetime,
                     description=data.description,status=data.status,active=True,tables=[tables])
     db.add(order)
     db.add(tables)
     db.commit()
+    #for eventsource
+    evt_data = json.dumps(parse_obj_as(TablesSchema,tables).dict(), default=str)
+    logger.info(evt_data)
+    db.execute(text("SELECT pg_notify(:channel, :data)").bindparams(channel="match_updates", data=evt_data))
+    db.commit()
+    ###
     db.refresh(order)
-
     return {"reservation":order}
 
+@router.get("/reservations/{id}", tags=["reservation"], response_model=Dict[str,ReserveSchema])
+def get_reservation_byid(id: int, db: Session = Depends(get_db)):
+    reservation = db.get(Reservation, id)
+    if not reservation:
+        raise HTTPException(status_code=404, detail="Reservation ID not found.")
+    return {"reservation":reservation}
+
+@router.delete("/reservations/{id}", tags=["reservation"])
+async def delete_reservation(id: int, db: Session = Depends(get_db)):
+    reservations = db.get(Reservation, id)
+    db.delete(reservations)
+    db.commit()
+    return {"message": "User has been deleted succesfully"}
+
+#####
 @router.get("/restables", tags=["reservation"], response_model=Dict[str,List[TablesSchema]])
 async def get_tables(
-    reservedate:date = None,
+    reservedate:date = None,shop:str=None,
     db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
 ):
-    if reservedate:
-        restables = db.query(Tables).filter(func.date(Tables.reservedate)==reservedate).order_by(desc(Tables.createdate)).all()
+    if reservedate and shop:
+        restables = db.query(Tables).filter(func.date(Tables.reservedate)==reservedate,Tables.shop==shop).order_by(desc(Tables.createdate)).all()
+        return {"restable":restables}
+    elif not reservedate and shop:
+        #from router
+        restables = db.query(Tables).filter(func.date(Tables.reservedate)==date.today(),Tables.shop==shop).order_by(desc(Tables.createdate)).all()
         return {"restable":restables}
     else:
         restables = db.query(Tables).filter(func.date(Tables.reservedate)==date.today()).order_by(desc(Tables.createdate)).all()

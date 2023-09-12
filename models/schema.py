@@ -5,6 +5,7 @@ from pydantic import BaseModel, validator,Field
 from sqlalchemy.orm import Query
 import json
 import uuid
+
 class OrmBase(BaseModel):
     id: int
 
@@ -188,6 +189,7 @@ class TablesSchema(OrmBase):
     name: str
     reservedate: date
     createdate: datetime
+    reservation_id:int
 
 class ReserveSchema(OrmBase):
     username: str
@@ -207,6 +209,7 @@ class CreateReserveSchema(OrmBase):
     id: Optional[int]
     username: str
     phoneno: str
+    shop: str
     reservedate: date
     reservetime: time
     description: str

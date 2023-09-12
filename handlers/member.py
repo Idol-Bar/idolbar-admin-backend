@@ -52,7 +52,6 @@ async def add_member(
     db.add(role)
     db.commit()
     db.refresh(member)
-
     return {"member":member}
 
 
