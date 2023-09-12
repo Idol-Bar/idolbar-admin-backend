@@ -7,6 +7,8 @@ from sqlalchemy import (
     BigInteger,
     String,
     DateTime,
+    Date,
+    Time,
     ForeignKey,
     JSON,
     ARRAY,
@@ -116,3 +118,25 @@ class PointLogs(Base):
     createdate = Column(DateTime, default=datetime.datetime.now)
     status = Column(String, nullable=False)
     info = Column(ARRAY(JSON), nullable=True)
+
+class Reservation(Base):
+    __tablename__ = 'reservation'
+    id = Column(Integer, primary_key=True)
+    username = Column(String, unique=False, nullable=True)
+    phoneno = Column(String, unique=False, nullable=True)
+    createdate = Column(DateTime, default=datetime.datetime.now)
+    reservedate = Column(Date, nullable=False)
+    reservetime = Column(Time, nullable=False)
+    description = Column(String, nullable=False)
+    status = Column(String, nullable=False)
+    active = Column(Boolean, unique=False, default=True)
+    tables = relationship('Tables', back_populates='reservation')
+
+class Tables(Base):
+    __tablename__ = 'tables'
+    id = Column(Integer, primary_key=True)
+    name = Column(String, unique=False, nullable=True)
+    reservation_id = Column(Integer, ForeignKey('reservation.id'))  # Define a foreign key
+    reservedate = Column(Date, nullable=False)
+    reservation = relationship('Reservation', back_populates='tables')
+    createdate = Column(DateTime, default=datetime.datetime.now)
