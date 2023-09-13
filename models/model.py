@@ -119,6 +119,33 @@ class PointLogs(Base):
     status = Column(String, nullable=False)
     info = Column(ARRAY(JSON), nullable=True)
 
+
+class BannerModel(Base):
+    __tablename__ = "banners"
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String,nullable=False)
+    description = Column(String, nullable=False)
+    postImage = Column(ARRAY(JSON), nullable=True)
+    createdate = Column(DateTime, default=datetime.datetime.now)
+
+class PostModel(Base):
+    __tablename__ = "posts"
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String,nullable=False)
+    category = Column(String,nullable=False)
+    description = Column(String, nullable=False)
+    postImage = Column(ARRAY(JSON), nullable=True)
+    createdate = Column(DateTime, default=datetime.datetime.now)
+    publishdate = Column(DateTime, default=datetime.datetime.now)
+    isnoti = Column(Boolean, unique=False, default=False)
+    
+class CategoryModel(Base):
+    __tablename__ = "category"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String,nullable=False)
+    postImage = Column(ARRAY(JSON), nullable=True)
+    createdate = Column(DateTime, default=datetime.datetime.now)
+
 class Reservation(Base):
     __tablename__ = 'reservation'
     id = Column(Integer, primary_key=True)
