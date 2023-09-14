@@ -5,6 +5,7 @@ from pydantic import BaseModel, validator,Field
 from sqlalchemy.orm import Query
 import json
 import uuid
+
 class OrmBase(BaseModel):
     id: int
 
@@ -188,6 +189,7 @@ class TablesSchema(OrmBase):
     name: str
     reservedate: date
     createdate: datetime
+    reservation_id:int
 
 class ReserveSchema(OrmBase):
     username: str
@@ -207,6 +209,7 @@ class CreateReserveSchema(OrmBase):
     id: Optional[int]
     username: str
     phoneno: str
+    shop: str
     reservedate: date
     reservetime: time
     description: str
@@ -219,3 +222,74 @@ class CreateReserveSchema(OrmBase):
 
 class CreateReserveSchemaRequest(BaseModel):
     reservation: CreateReserveSchema
+
+###Banner
+
+class GetBannerSchema(OrmBase):
+    id: Optional[int]
+    title: str
+    description: str
+    createdate: datetime
+    postImage: Optional[List] = []
+    class Config:
+        orm_mode = True
+
+class CreateBannerSchema(OrmBase):
+    id: Optional[int]
+    title: str
+    description: str
+    postImage: Optional[List] = []
+
+    class Config:
+        orm_mode = True
+
+class CreateBannerSchemaRequest(BaseModel):
+    banner: CreateBannerSchema
+
+###Post
+
+class GetPostSchema(OrmBase):
+    id: Optional[int]
+    category: str
+    title: str
+    description: str
+    createdate: datetime
+    publishdate: datetime
+    postImage: Optional[List] = []
+    class Config:
+        orm_mode = True
+
+class CreatePostSchema(OrmBase):
+    id: Optional[int]
+    category: str
+    title: str
+    description: str
+    publishdate: date
+    isnoti: bool
+    postImage: Optional[List] = []
+
+    class Config:
+        orm_mode = True
+
+class CreatePostSchemaRequest(BaseModel):
+    post: CreatePostSchema
+
+###Category
+class GetCategorySchema(OrmBase):
+    id: int
+    name: str
+    postImage: Optional[List] = []
+    createdate: datetime
+    class Config:
+        orm_mode = True
+
+class CreateCategorySchema(OrmBase):
+    id: Optional[int]
+    name: str
+    postImage: Optional[List] = []
+    class Config:
+        orm_mode = True
+
+class CreateCategorySchemaRequest(BaseModel):
+    category: CreateCategorySchema
+
