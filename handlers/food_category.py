@@ -28,7 +28,7 @@ async def get_categories(
     count = db.query(FoodCategoryModel).count()
     meta_data =  pagination(page,per_page,count)
     categories = db.query(FoodCategoryModel).order_by(desc(FoodCategoryModel.createdate)).limit(per_page).offset((page - 1) * per_page).all()
-    return jsonable_encoder({"food-category":categories,"meta":meta_data})
+    return jsonable_encoder({"foodCategory":categories,"meta":meta_data})
 
 
 
@@ -42,7 +42,7 @@ async def add_category(
     db.commit()
     db.refresh(category)
 
-    return {"food-category":category}
+    return {"foodCategory":category}
 
 @router.get("/foodCategories/{id}", tags=["food"], response_model=Dict[str,GetFoodCategorySchema])
 def get_category_byid(id: int, db: Session = Depends(get_db)):
@@ -69,7 +69,7 @@ async def update_category(id: int, data: CreateFoodCategorySchemaRequest,db: Ses
     logger.info(data.foodCategory)
     db.commit()
     db.refresh(db_category)
-    return {"food-category":db_category}
+    return {"foodCategory":db_category}
 
 
 @router.get("/foodcatlists", tags=["food"])#, response_model=Dict[str,List[GetBookSchema],str,str])
