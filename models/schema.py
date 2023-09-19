@@ -293,3 +293,63 @@ class CreateCategorySchema(OrmBase):
 class CreateCategorySchemaRequest(BaseModel):
     category: CreateCategorySchema
 
+###Food Category
+class GetFoodCategorySchema(OrmBase):
+    id: int
+    name: str
+    postImage: Optional[List] = []
+    createdate: datetime
+    class Config:
+        orm_mode = True
+
+class CreateFoodCategorySchema(OrmBase):
+    id: Optional[int]
+    name: str
+    postImage: Optional[List] = []
+    class Config:
+        orm_mode = True
+
+class CreateFoodCategorySchemaRequest(BaseModel):
+    foodCategory: CreateFoodCategorySchema
+
+
+class GetFoodSchema(OrmBase):
+    id: Optional[int]
+    name: str
+    code: str
+    description: str
+    instock: bool
+    bestsell: bool
+    todayspecial: bool
+    discount: int
+    price: int
+    createdate: datetime
+    postImage: Optional[List] = []
+    category: GetFoodCategorySchema  = []
+
+    class Config:
+        orm_mode = True
+
+class FoodSchemaWithMeta(BaseModel):
+    food: List[GetFoodSchema] = []
+    meta : MetaSchema
+
+class CreateFoodSchema(OrmBase):
+    id: Optional[int]
+    name: str
+    code: str
+    description: str
+    instock: bool
+    bestsell: bool
+    todayspecial: bool
+    discount: int
+    price: int
+    category_id: int
+    postImage: Optional[List] = []
+    class Config:
+        orm_mode = True
+
+class CreateFoodSchemaRequest(BaseModel):
+    food: CreateFoodSchema
+
+
