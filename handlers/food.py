@@ -22,7 +22,7 @@ auth_handler = AuthToken()
 
 @router.get("/foods", tags=["food"],response_model=FoodSchemaWithMeta)
 async def get_food(
-page: int = 1 , per_page: int=10,
+page: int = 1 , per_page: int=12,
     db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
 ):
     count = db.query(FoodModel).count()
