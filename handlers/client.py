@@ -25,7 +25,7 @@ async def get_client(
 ):
     count = db.query(EndUser).count()
     meta_data =  pagination(page,per_page,count)
-    clients = db.query(EndUser).join(Tier, EndUser.tier).order_by(desc(EndUser.createdate)).limit(per_page).offset((page - 1) * per_page).all()
+    clients = db.query(EndUser).join(Tier, EndUser.tier).filter(EndUser.status=="CONFIRM").order_by(desc(EndUser.createdate)).limit(per_page).offset((page - 1) * per_page).all()
     return {"client":clients,"meta":meta_data}
 
 @router.get("/clients/{id}", tags=["client"], response_model=Dict[str,ClientSchema])
