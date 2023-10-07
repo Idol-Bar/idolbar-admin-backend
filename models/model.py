@@ -200,3 +200,10 @@ class NotiModel(Base):
     tier = Column(String, nullable=False)
     description = Column(String, nullable=False)
     createdate = Column(DateTime, default=datetime.datetime.now)
+
+class FaqModel(Base):
+    __tablename__ = "faq"
+    id = Column(Integer, primary_key=True, index=True)
+    question = Column(String,nullable=False)
+    answer = Column(String,nullable=False)
+    createdate = Column(DateTime, default=datetime.datetime.now)

@@ -374,3 +374,20 @@ class CreateNotiSchema(BaseModel):
 class CreateNotiSchemaRequest(BaseModel):
     notification: CreateNotiSchema
 
+class GetFAQSchema(OrmBase):
+    id: int
+    question: str
+    answer: str
+    createdate: datetime
+    class Config:
+        orm_mode = True
+
+class CreateFAQSchema(OrmBase):
+    id: Optional[int]
+    question: str
+    answer: str
+    class Config:
+        orm_mode = True
+
+class CreateFAQSchemaRequest(BaseModel):
+    faq: CreateFAQSchema

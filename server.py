@@ -24,7 +24,7 @@ def create_app():
     )
 
     from modules.dependency import AuthHandler
-    from handlers import login, auth, upload,member,profile,client,tier,point,transition,report,reservation,evtsource,banner,post,category,food,food_category,notification
+    from handlers import login, auth, upload,member,profile,client,tier,point,transition,report,reservation,evtsource,banner,post,category,food,food_category,notification,faq
     from handlers.database import SessionLocal, engine
     #import models.model as app_model
     import handlers.database as app_model
@@ -53,6 +53,7 @@ def create_app():
     app.include_router(food.router)
     app.include_router(food_category.router)
     app.include_router(notification.router)
+    app.include_router(faq.router)
     #app.include_router(posts.router,dependencies=[Depends(AdminHandler)])
     
     app.mount("/public", StaticFiles(directory="dist"), name="public")
