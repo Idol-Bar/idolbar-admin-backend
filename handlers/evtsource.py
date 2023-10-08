@@ -20,7 +20,7 @@ router = APIRouter()
 STREAM_DELAY = 1  # second
 RETRY_TIMEOUT = 15000  # milisecond
 
-@router.get('/notification', tags=["evtsource"])
+@router.get('/noti', tags=["evtsource"])
 async def message_stream(request: Request):
     async def event_generator():
         conn = psycopg2.connect(host=settings._dbhost, dbname=settings._dbname, user=settings._dbuser, password=settings._dbpass)

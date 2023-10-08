@@ -11,8 +11,8 @@ from firebase_admin import credentials
 import firebase_admin
 def create_app():
     app = FastAPI()
-    #cred = credentials.Certificate("royaltrip-admin-sdk.json")
-    #firebase_app = firebase_admin.initialize_app(cred)
+    cred = credentials.Certificate("idolbar-firebase-adminsdk.json")
+    firebase_app = firebase_admin.initialize_app(cred)
     auth_handler = AuthToken()
     origins = ["*"]
     app.add_middleware(
@@ -24,7 +24,7 @@ def create_app():
     )
 
     from modules.dependency import AuthHandler
-    from handlers import login, auth, upload,member,profile,client,tier,point,transition,report,reservation,evtsource,banner,post,category,food,food_category
+    from handlers import login, auth, upload,member,profile,client,tier,point,transition,report,reservation,evtsource,banner,post,category,food,food_category,notification,faq
     from handlers.database import SessionLocal, engine
     #import models.model as app_model
     import handlers.database as app_model
@@ -32,7 +32,7 @@ def create_app():
 
     app_model.Base.metadata.create_all(bind=engine)
     logging.basicConfig(
-       format='AloDawPyi:{levelname:7} {message}', style='{', level=logging.DEBUG)
+       format='Idolbar:{levelname:7} {message}', style='{', level=logging.DEBUG)
 
     app.include_router(upload.upload_router)
     app.include_router(upload.read_router)
@@ -52,6 +52,8 @@ def create_app():
     app.include_router(category.router)
     app.include_router(food.router)
     app.include_router(food_category.router)
+    app.include_router(notification.router)
+    app.include_router(faq.router)
     #app.include_router(posts.router,dependencies=[Depends(AdminHandler)])
     
     app.mount("/public", StaticFiles(directory="dist"), name="public")

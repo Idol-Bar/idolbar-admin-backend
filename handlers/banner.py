@@ -20,7 +20,7 @@ auth_handler = AuthToken()
 
 @router.get("/banners", tags=["banner"])#, response_model=Dict[str,List[GetBannerSchema]])
 async def get_banner(
-    page: int = 1 , per_page: int=12,
+    page: int = 1 , per_page: int=8,
     db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
 ):
     count = db.query(BannerModel).count()

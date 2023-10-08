@@ -53,3 +53,11 @@ async def delete_member(tier_id: int, db: Session = Depends(get_db)):
     db.delete(tier_rule)
     db.commit()
     return {"message": "User has been deleted succesfully"}
+
+
+@router.get("/tiers", tags=["tier"])
+async def get_tiers(
+    db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
+):
+    post_data = db.query(TierRule.id,TierRule.name,TierRule.createdate).order_by(desc(TierRule.createdate)).all()
+    return {"tier":post_data}

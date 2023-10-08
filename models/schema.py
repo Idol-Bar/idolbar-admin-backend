@@ -120,7 +120,7 @@ class ClientSchema(OrmBase):
     birthday: str
     createdate: datetime
     phoneno: str
-    status: bool
+    status: str
     active: Optional[bool] = False
     tier: List[TierSchema]  = []
  
@@ -353,3 +353,41 @@ class CreateFoodSchemaRequest(BaseModel):
     food: CreateFoodSchema
 
 
+### Notification
+
+class GetNotiSchema(OrmBase):
+    id: Optional[int]
+    title: str
+    description: str
+    createdate: datetime
+    class Config:
+        orm_mode = True
+
+class CreateNotiSchema(BaseModel):
+    title: str
+    tier: str
+    description: str
+
+    class Config:
+        orm_mode = True
+
+class CreateNotiSchemaRequest(BaseModel):
+    notification: CreateNotiSchema
+
+class GetFAQSchema(OrmBase):
+    id: int
+    question: str
+    answer: str
+    createdate: datetime
+    class Config:
+        orm_mode = True
+
+class CreateFAQSchema(OrmBase):
+    id: Optional[int]
+    question: str
+    answer: str
+    class Config:
+        orm_mode = True
+
+class CreateFAQSchemaRequest(BaseModel):
+    faq: CreateFAQSchema
