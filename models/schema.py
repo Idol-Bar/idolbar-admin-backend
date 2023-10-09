@@ -391,3 +391,36 @@ class CreateFAQSchema(OrmBase):
 
 class CreateFAQSchemaRequest(BaseModel):
     faq: CreateFAQSchema
+
+
+class EndUserSchema(OrmBase):
+    username:str
+    phoneno:str
+
+class OrderItemSchema(BaseModel):
+    id: Optional[int]
+    price:Optional[int]=0
+    food_id: Optional[int]=0
+    quantity: Optional[int]=0
+    food: GetFoodSchema
+
+    class Config:
+        orm_mode = True
+
+class GetOrder(BaseModel):
+    id: Optional[int]
+    createdate: datetime
+    payment: str
+    postImage: Optional[List] = []
+    user_id: int
+    enduser:EndUserSchema
+    status: str
+    description: str
+    order_items: Optional[List[OrderItemSchema]] = None
+
+    class Config:
+        orm_mode = True
+
+class GetOrderSchemaWithMeta(BaseModel):
+    order: List[GetOrder] = []
+    meta : MetaSchema
