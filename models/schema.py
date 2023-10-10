@@ -424,3 +424,12 @@ class GetOrder(BaseModel):
 class GetOrderSchemaWithMeta(BaseModel):
     order: List[GetOrder] = []
     meta : MetaSchema
+
+class OrderStatus(BaseModel):
+    status:str
+    class Config:
+        orm_mode = True
+
+class UpdateOrderStatus(BaseModel):
+    order: OrderStatus
+
