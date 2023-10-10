@@ -3,7 +3,9 @@ from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.logger import logger
 from models.schema import (
     CurrentUser,
-    GetOrderSchemaWithMeta
+    GetOrder,
+    GetOrderSchemaWithMeta,
+    UpdateOrderStatus
  
 )
 from typing import List, Dict
@@ -28,3 +30,22 @@ async def get_orders(
     meta_data =  pagination(page,per_page,count)
     order_data = db.query(Order).order_by(desc(Order.createdate)).limit(per_page).offset((page - 1) * per_page).all()
     return {"order":order_data,"meta":meta_data}
+
+
+
+@router.get("/orders/{id}", tags=["order"], response_model=Dict[str,GetOrder])
+def get_order_byid(id: int, db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)):
+    order = db.get(Order, id)
+    if not order:
+        raise HTTPException(status_code=404, detail="Order ID not found.")
+    return {"order":order}
+
+@router.put("/orders/{id}", tags=["member"], response_model=Dict[str,GetOrder])
+async def update_order_status(id: int, data:UpdateOrderStatus ,db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)):
+    db_order = db.query(Order).get(id)
+    if not db_order:
+        raise HTTPException(status_code=404, detail="Order ID not found.")
+    db_order.status = data.order.status
+    db.commit()
+    db.refresh(db_order)
+    return {"order":db_order}
