@@ -360,6 +360,7 @@ class GetNotiSchema(OrmBase):
     title: str
     description: str
     createdate: datetime
+    tier: str
     class Config:
         orm_mode = True
 
