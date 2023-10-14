@@ -44,7 +44,7 @@ async def add_banner(
 @router.get("/banners/{id}", tags=["banner"], response_model=Dict[str,GetBannerSchema])
 def get_banner_byid(id: int, db: Session = Depends(get_db)):
     banner = db.get(BannerModel, id)
-    if not member:
+    if not banner:
         raise HTTPException(status_code=404, detail="Banner ID not found.")
     return {"banner":banner}
 
