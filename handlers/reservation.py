@@ -26,11 +26,11 @@ auth_handler = AuthToken()
 
 @router.get("/reservations", tags=["reservation"], response_model=Dict[str,List[ReserveSchema]])
 async def get_reservation(
-    tables:str = None,reservedate:date = date.today(),
+    tables:str = None,reservedate:date = date.today(),shop:str = None,
     db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
 ):
     if tables:
-        reservation = db.query(Reservation).join(Tables, Reservation.tables).filter(func.date(Reservation.reservedate)==reservedate,Tables.name==tables).order_by(desc(Reservation.createdate)).all()
+        reservation = db.query(Reservation).join(Tables, Reservation.tables).filter(func.date(Reservation.reservedate)==reservedate,Tables.name==tables,Tables.shop==shop).order_by(desc(Reservation.createdate)).all()
         return {"reservation":reservation}
     else:
         #reservation = db.query(Reservation).join(Tables, Reservation.tables).filter(func.date(Reservation.reservedate)==date.today()).order_by(desc(Reservation.createdate)).all()
@@ -44,7 +44,7 @@ async def add_reservation(
     logger.info(reservation.dict())
     data = reservation.reservation
     logger.info(data.tables[0])
-    is_reserved = db.query(Reservation).join(Tables, Reservation.tables).filter(func.date(Reservation.reservedate) == data.reservedate,Tables.name==data.tables[0]).first()
+    is_reserved = db.query(Reservation).join(Tables, Reservation.tables).filter(func.date(Reservation.reservedate) == data.reservedate,Tables.name==data.tables[0],Tables.shop==data.shop).first()
     if is_reserved:
         raise HTTPException(status_code=400, detail="Reservation already registered.")
     tables = Tables(name=data.tables[0],reservedate=data.reservedate,shop=data.shop)
