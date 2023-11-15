@@ -48,11 +48,27 @@ async def add_tier_rule(
 
 
 @router.delete("/tierRules/{tier_id}", tags=["tier"])
-async def delete_member(tier_id: int, db: Session = Depends(get_db)):
+async def delete_tier_rule(tier_id: int, db: Session = Depends(get_db)):
     tier_rule = db.get(TierRule, tier_id)
     db.delete(tier_rule)
     db.commit()
     return {"message": "User has been deleted succesfully"}
+
+
+@router.put("/tierRules/{id}", tags=["food"], response_model=Dict[str,TierRuleSchema])
+async def update_tierule(id: int, data: CreateTierRuleSchemaRequest,db: Session = Depends(get_db)):
+    db_tier = db.query(TierRule).get(id)
+    if not db_tier:
+        raise HTTPException(status_code=404, detail="Food ID not found.")
+    db_tier.name =  data.tierRule.name
+    db_tier.lower =  data.tierRule.lower
+    db_tier.higher =  data.tierRule.higher
+    db_tier.percentage = data.tierRule.percentage
+    db_tier.description = data.tierRule.description
+    db_tier.postImage = data.tierRule.postImage
+    db.commit()
+    db.refresh(db_tier)
+    return {"tier_rule":db_tier}
 
 
 @router.get("/tiers", tags=["tier"])
