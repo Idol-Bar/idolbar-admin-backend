@@ -4,7 +4,8 @@ from fastapi.logger import logger
 from models.schema import (
     CurrentUser,
     CreateMemberSchemaRequest,
-    MemberSchema
+    MemberSchema,
+    MemberSchemaWithMeta
 )
 from typing import List, Dict
 from .database import get_db
@@ -18,7 +19,7 @@ router = APIRouter()
 auth_handler = AuthToken()
 
 
-@router.get("/members", tags=["member"])
+@router.get("/members", tags=["member"], response_model=MemberSchemaWithMeta)
 async def get_member(
     page: int = 1 , per_page: int=12,
     db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)

@@ -66,6 +66,8 @@ class MemberSchema(OrmBase):
     class Config:
         orm_mode = True
 
+
+
 """class MemberSchemaResponse(BaseModel):
     member: List[MemberSchema]"""
 
@@ -434,3 +436,6 @@ class OrderStatus(BaseModel):
 class UpdateOrderStatus(BaseModel):
     order: OrderStatus
 
+class MemberSchemaWithMeta(BaseModel):
+    member: List[MemberSchema] = []
+    meta : MetaSchema
