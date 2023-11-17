@@ -439,3 +439,29 @@ class UpdateOrderStatus(BaseModel):
 class MemberSchemaWithMeta(BaseModel):
     member: List[MemberSchema] = []
     meta : MetaSchema
+
+
+##MemberSchema
+
+class EventSchema(BaseModel):
+    id: Optional[int]
+    name: str
+    description: str
+    reservedate: date
+    postImage: Optional[List] = []
+
+    class Config:
+        orm_mode = True
+
+
+class CreateEventSchema(BaseModel):
+    name: str
+    description: str
+    reservedate: date
+    postImage: Optional[List] = []
+
+    class Config:
+        orm_mode = True
+
+class CreateEventSchemaRequest(BaseModel):
+    event: CreateEventSchema
