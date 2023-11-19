@@ -42,6 +42,31 @@ async def get_transition(
     return {"sharept":transition,"meta":meta_data}
 
 
+@router.get("/paypts", tags=["transition"])
+async def get_paypoint(
+    page: int = 1 , per_page: int=10,
+    db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
+):
+    #members = db.query(User).all()
+    count = db.query(PointLogs).count()
+    meta_data =  pagination(page,per_page,count)
+    transition = db.query(PointLogs).filter(PointLogs.status=="Pay Point").order_by(desc(PointLogs.createdate)).limit(per_page).offset((page - 1) * per_page).all()
+    return {"paypt":transition,"meta":meta_data}
+
+
+@router.get("/rewardpts", tags=["transition"])
+async def get_rewardpts(
+    page: int = 1 , per_page: int=10,
+    db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
+):
+    #members = db.query(User).all()
+    count = db.query(PointLogs).count()
+    meta_data =  pagination(page,per_page,count)
+    transition = db.query(PointLogs).filter(PointLogs.status=="Reward").order_by(desc(PointLogs.createdate)).limit(per_page).offset((page - 1) * per_page).all()
+    return {"rewardpt":transition,"meta":meta_data}
+
+
+
 @router.get("/searchtransitions", tags=["transition"])
 def search_client(phoneno: str = None, db: Session = Depends(get_db)):
     if not phoneno or not len(phoneno)>0:
