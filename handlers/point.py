@@ -17,7 +17,6 @@ from modules.utils import calc_percent
 router = APIRouter()
 auth_handler = AuthToken()
 
-rules = {"gold":5,"platinum":10,"diamond":15}
 
 @router.post("/points", tags=["point"])
 async def add_point(
@@ -46,8 +45,8 @@ async def add_point(
             db.rollback()
             raise e
     logger.info("Add point to depending on Tier")
-    
-    percent = calc_percent(amount=point_info.amount,percentage=rules[tier.name])
+    tier_data = db.query(TierRule).filter(TierRule.name == tier.name).first()
+    percent = calc_percent(amount=point_info.amount,percentage=tier_data.percentage)
     owner = db.query(EndUser).get(point_info.userId)
     for _ in range(percent):
         new_transition = Transition(fromUser="admin",toUser=owner.username,status="buy")
