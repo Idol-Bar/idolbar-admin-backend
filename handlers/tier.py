@@ -66,6 +66,7 @@ async def update_tierule(id: int, data: CreateTierRuleSchemaRequest,db: Session 
     db_tier.percentage = data.tierRule.percentage
     db_tier.description = data.tierRule.description
     db_tier.postImage = data.tierRule.postImage
+    db_tier.unit = data.tierRule.unit
     db.commit()
     db.refresh(db_tier)
     return {"tier_rule":db_tier}

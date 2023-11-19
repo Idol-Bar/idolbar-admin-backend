@@ -149,6 +149,7 @@ class TierRuleSchema(OrmBase):
     higher: int
     percentage: int
     description: str
+    unit: int
     postImage: Optional[List] = []
     createdate: datetime
     
@@ -162,6 +163,7 @@ class CreateTierRuleSchema(OrmBase):
     higher: int
     percentage: int
     description: str
+    unit:int
     postImage: Optional[List] = []
 
     class Config:
