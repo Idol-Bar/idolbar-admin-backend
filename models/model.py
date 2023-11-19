@@ -50,9 +50,12 @@ class EndUser(Base):
     postImage = Column(ARRAY(JSON), nullable=True)
     info = Column(ARRAY(JSON), nullable=True)
     phoneno = Column(String, unique=True, nullable=False)
-    status = Column(String,nullable=False)
+    status = Column(String, nullable=False)
     active = Column(Boolean, unique=False, default=True)
     tier = relationship("Tier", back_populates="enduser", cascade="all,delete", lazy="dynamic")
+    code = Column(String,nullable=True)
+    state = Column(String,nullable=True)
+    division = Column(String,nullable=True)
     #point_id = Column(Integer, ForeignKey('point.id'))
     point = relationship("Point", back_populates="owner")
 
@@ -95,6 +98,7 @@ class TierRule(Base):
     percentage = Column(Integer,nullable=False)
     description = Column(String, nullable=False)
     postImage = Column(ARRAY(JSON), nullable=True)
+    unit = Column(Integer, nullable=False,default=1)
     createdate = Column(DateTime, default=datetime.datetime.now)
 
 class Money(Base):

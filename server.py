@@ -28,7 +28,7 @@ def create_app():
     from handlers.database import SessionLocal, engine
     #import models.model as app_model
     import handlers.database as app_model
-    from models.model import User, Role,EndUser,Tier
+    from models.model import User, Role,EndUser,Tier,TierRule
 
     app_model.Base.metadata.create_all(bind=engine)
     logging.basicConfig(
@@ -69,6 +69,35 @@ def create_app():
 
     @app.on_event("startup")
     async def startup_event():
+        tier_data = [
+            {
+                "name": "silver",
+                "lower": 0,
+                "higher": 10000,
+                "percentage": 1,
+                "description": "Silver User",
+                "unit":10,
+                "postImage": [],
+            },
+            {
+                "name": "gold",
+                "lower": 10001,
+                "higher": 20000,
+                "percentage": 2,
+                "description": "gold User",
+                "unit":20,
+                "postImage": [],
+            },
+            {
+                "name": "platinum",
+                "lower": 20001,
+                "higher": 30000,
+                "percentage": 3,
+                "description": "Platinum User",
+                "unit":30,
+                "postImage": [],
+            },
+        ]
         user_data = [
             {
                 "username": "ibaradmin",
@@ -115,6 +144,19 @@ def create_app():
                     user["username"]
                     + " Already Exists with role "
                     + user["role"]
+                )
+        for tier in tier_data:
+            is_tier_rule = db.query(TierRule).filter(TierRule.name == tier["name"]).first()
+            if not is_tier_rule:
+                logger.info(f"Tier {tier['name']}  Does not Exist")
+                
+                db_tier = TierRule(name=tier["name"],lower= tier["lower"],higher= tier["higher"],percentage= tier["percentage"],description=tier["description"],unit=tier["unit"],postImage=  [])
+                db.add(db_tier)
+                db.commit()
+            else:
+                logger.info(
+                    tier["name"]
+                    + " Already Exists"
                 )
         logger.info("Database Startup Complete")
         

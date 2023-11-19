@@ -178,6 +178,12 @@ class AddPointSchema(OrmBase):
     unit: int
     amount:Optional[int]=0
 
+class PayPointSchema(OrmBase):
+    id: Optional[int]
+    userId: int
+    total_amt: int
+    pay_amt:int
+
 ### Reservation
 class CreateTableSchema(OrmBase):
     id: Optional[int]
