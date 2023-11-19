@@ -18,6 +18,15 @@ from modules.utils import calc_percent
 router = APIRouter()
 auth_handler = AuthToken()
 
+@router.get("/points/user/{id}", tags=["point"])
+def get_user_pt(id: int, db: Session = Depends(get_db)):
+    owner = db.query(EndUser).get(id)
+    owner_points_count = db.query(Point).filter(Point.owner_id == id).all()
+    points = len(owner_points_count) if owner_points_count is not None else 0
+    tier_rule = db.query(TierRule).filter(and_(TierRule.lower <= points, TierRule.higher >= points)).first()
+    return {"username":owner.username,"unit":points,"tier":tier_rule.name}
+
+
 
 @router.post("/points", tags=["point"])
 async def add_point(
