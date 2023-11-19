@@ -98,6 +98,7 @@ class TierRule(Base):
     percentage = Column(Integer,nullable=False)
     description = Column(String, nullable=False)
     postImage = Column(ARRAY(JSON), nullable=True)
+    unit = Column(Integer, nullable=False,default=1)
     createdate = Column(DateTime, default=datetime.datetime.now)
 
 class Money(Base):
