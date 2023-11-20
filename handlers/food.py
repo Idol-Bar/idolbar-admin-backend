@@ -39,7 +39,7 @@ async def add_food(
     food = data.food
     category = db.get(FoodCategoryModel, data.food.category_id)
     foods = FoodModel(name=food.name, category=category,code=food.code,description=food.description,
-            instock=food.instock,bestsell=food.bestsell,todayspecial=food.todayspecial,
+            instock=food.instock,bestsell=food.bestsell,todayspecial=food.todayspecial,shop=food.shop,
             discount=food.discount,price=food.price,postImage=food.postImage)
     db.add(foods)
     db.commit()
@@ -77,6 +77,7 @@ async def update_food(id: int, data: CreateFoodSchemaRequest,db: Session = Depen
     db_food.price = data.food.price
     db_food.postImage = data.food.postImage
     db_food.category =  category
+    db_food.shop = data.food.shop
     logger.info(data.food)
     db.commit()
     db.refresh(db_food)

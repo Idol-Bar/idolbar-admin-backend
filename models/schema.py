@@ -334,6 +334,7 @@ class GetFoodSchema(OrmBase):
     discount: int
     price: int
     createdate: datetime
+    shop: Optional[str] = "shop1"
     postImage: Optional[List] = []
     category: GetFoodCategorySchema  = []
 
@@ -356,6 +357,7 @@ class CreateFoodSchema(OrmBase):
     price: int
     category_id: int
     postImage: Optional[List] = []
+    shop: Optional[str] = "shop1"
     class Config:
         orm_mode = True
 
