@@ -36,7 +36,7 @@ async def get_transition(
     db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
 ):
     #members = db.query(User).all()
-    count = db.query(PointLogs).count()
+    count = db.query(PointLogs).filter(PointLogs.status=="Share").count()
     meta_data =  pagination(page,per_page,count)
     transition = db.query(PointLogs).filter(PointLogs.status=="Share").order_by(desc(PointLogs.createdate)).limit(per_page).offset((page - 1) * per_page).all()
     return {"sharept":transition,"meta":meta_data}
@@ -48,7 +48,7 @@ async def get_paypoint(
     db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
 ):
     #members = db.query(User).all()
-    count = db.query(PointLogs).count()
+    count = db.query(PointLogs).filter(PointLogs.status=="Pay Point").count()
     meta_data =  pagination(page,per_page,count)
     transition = db.query(PointLogs).filter(PointLogs.status=="Pay Point").order_by(desc(PointLogs.createdate)).limit(per_page).offset((page - 1) * per_page).all()
     return {"paypt":transition,"meta":meta_data}
@@ -60,7 +60,7 @@ async def get_rewardpts(
     db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
 ):
     #members = db.query(User).all()
-    count = db.query(PointLogs).count()
+    count = db.query(PointLogs).filter(PointLogs.status=="Reward").count()
     meta_data =  pagination(page,per_page,count)
     transition = db.query(PointLogs).filter(PointLogs.status=="Reward").order_by(desc(PointLogs.createdate)).limit(per_page).offset((page - 1) * per_page).all()
     return {"rewardpt":transition,"meta":meta_data}
