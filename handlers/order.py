@@ -23,12 +23,12 @@ auth_handler = AuthToken()
 
 @router.get("/orders", tags=["order"],response_model=GetOrderSchemaWithMeta)#, response_model=Dict[str,List[GetOrder]])
 async def get_orders(
-    page: int = 1 , per_page: int=10,
+    page: int = 1 , per_page: int=10,shop:str ="shop1",
     db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
 ):
-    count = db.query(Order).count()
+    count = db.query(Order).filter(Order.shop==shop).count()
     meta_data =  pagination(page,per_page,count)
-    order_data = db.query(Order).order_by(desc(Order.createdate)).limit(per_page).offset((page - 1) * per_page).all()
+    order_data = db.query(Order).filter(Order.shop==shop).order_by(desc(Order.createdate)).limit(per_page).offset((page - 1) * per_page).all()
     return {"order":order_data,"meta":meta_data}
 
 

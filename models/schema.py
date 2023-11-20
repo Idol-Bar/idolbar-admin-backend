@@ -429,6 +429,7 @@ class GetOrder(BaseModel):
     enduser:EndUserSchema
     status: str
     description: str
+    shop: Optional[str] = "shop1"
     order_items: Optional[List[OrderItemSchema]] = None
 
     class Config:
