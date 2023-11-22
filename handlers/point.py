@@ -39,8 +39,7 @@ async def add_point(
     tier_rule = db.query(TierRule).filter(and_(TierRule.lower <= points, TierRule.higher >= points)).first()
     require_amt = point_info.total_amt - point_info.pay_amt
     wallet_pts = tier_rule.unit * points
-    if wallet_pts  < require_amt:
-        raise HTTPException(status_code=400, detail="Not Enough Point.")
+    
     #archive_pts = calc_percent(amount=point_info.pay_amt,percentage=tier_rule.percentage)
     owner = db.query(EndUser).get(point_info.userId)
     archive_pts = int(point_info.pay_amt / tier_rule.unit)
@@ -61,6 +60,8 @@ async def add_point(
         updated_points = len(owner_points_count) if owner_points_count is not None else 0
         return {"amount":point_info.total_amt,"percentage":tier_rule.percentage,"tier":tier_rule.name,"total":point_info.total_amt,"reward":archive_pts,"beforePoint":points,"afterPoint":updated_points}
     elif require_amt>0: 
+        if wallet_pts  < require_amt:
+            raise HTTPException(status_code=400, detail="Not Enough Point.")
         logger.info("Pay With Money and Point")
         #pay point with require
         pay_pts = int(require_amt/tier_rule.unit)

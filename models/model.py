@@ -21,7 +21,7 @@ import datetime
 
 class User(Base):
     __tablename__ = "user"
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     username = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
     createdate = Column(DateTime, default=datetime.datetime.now)
@@ -35,7 +35,7 @@ class UserInDB(User):
 
 class Role(Base):
     __tablename__ = "role"
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     name = Column(String, nullable=False)
     user_id = Column(Integer, ForeignKey("user.id"))
     user = relationship("User", back_populates="role", cascade="all,delete")
@@ -43,7 +43,7 @@ class Role(Base):
 
 class EndUser(Base):
     __tablename__ = "enduser"
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     username = Column(String, unique=False, nullable=True)
     birthday = Column(String, nullable=True)
     createdate = Column(DateTime, default=datetime.datetime.now)
@@ -62,7 +62,7 @@ class EndUser(Base):
 
 class Tier(Base):
     __tablename__ = "tier"
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     name = Column(String, nullable=False)
     user_id = Column(Integer, ForeignKey("enduser.id"))
     enduser = relationship("EndUser", back_populates="tier", cascade="all,delete")
@@ -70,7 +70,7 @@ class Tier(Base):
 
 class Point(Base):
     __tablename__ = 'point'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     unit = Column(Integer, nullable=False,default=1)
     owner_id = Column(Integer, ForeignKey("enduser.id"))
     owner = relationship("EndUser", uselist=False, back_populates="point")
@@ -80,7 +80,7 @@ class Point(Base):
 
 class Transition(Base):
     __tablename__ = 'transitions'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     fromUser = Column(String, nullable=False)
     toUser = Column(String, nullable=False)
     createdate = Column(DateTime, default=datetime.datetime.now)
@@ -91,7 +91,7 @@ class Transition(Base):
 
 class TierRule(Base):
     __tablename__ = "tierrule"
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     name = Column(String,nullable=False)
     lower = Column(Integer,nullable=False)
     higher = Column(Integer,nullable=False)
@@ -103,7 +103,7 @@ class TierRule(Base):
 
 class Money(Base):
     __tablename__ = 'money'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     amount = Column(Integer, nullable=False)
     user_id = Column(String, nullable=False)
     createdate = Column(DateTime, default=datetime.datetime.now)
@@ -111,7 +111,7 @@ class Money(Base):
 
 class PointLogs(Base):
     __tablename__ = 'pointlogs'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     amount = Column(Integer, nullable=False)
     point = Column(Integer, nullable=False)
     tier = Column(String, nullable=False)
@@ -126,7 +126,7 @@ class PointLogs(Base):
 
 class BannerModel(Base):
     __tablename__ = "banners"
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     title = Column(String,nullable=False)
     description = Column(String, nullable=False)
     postImage = Column(ARRAY(JSON), nullable=True)
@@ -134,7 +134,7 @@ class BannerModel(Base):
 
 class PostModel(Base):
     __tablename__ = "posts"
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     title = Column(String,nullable=False)
     category = Column(String,nullable=False)
     description = Column(String, nullable=False)
@@ -145,14 +145,14 @@ class PostModel(Base):
     
 class CategoryModel(Base):
     __tablename__ = "category"
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     name = Column(String,nullable=False)
     postImage = Column(ARRAY(JSON), nullable=True)
     createdate = Column(DateTime, default=datetime.datetime.now)
 
 class Reservation(Base):
     __tablename__ = 'reservation'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String, unique=False, nullable=True)
     phoneno = Column(String, unique=False, nullable=True)
     createdate = Column(DateTime, default=datetime.datetime.now)
@@ -165,7 +165,7 @@ class Reservation(Base):
 
 class Tables(Base):
     __tablename__ = 'tables'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, unique=False, nullable=True)
     shop = Column(String, nullable=False)
     reservation_id = Column(Integer, ForeignKey('reservation.id'))  # Define a foreign key
@@ -175,7 +175,7 @@ class Tables(Base):
 
 class FoodCategoryModel(Base):
     __tablename__ = "foodcategory"
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     name = Column(String,nullable=False)
     postImage = Column(ARRAY(JSON), nullable=True)
     createdate = Column(DateTime, default=datetime.datetime.now)
@@ -183,7 +183,7 @@ class FoodCategoryModel(Base):
 
 class FoodModel(Base):
     __tablename__ = "foods"
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     name = Column(String,nullable=False)
     code = Column(String,nullable=False)
     description = Column(String, nullable=False)
@@ -200,7 +200,7 @@ class FoodModel(Base):
 
 class Cart(Base):
     __tablename__ = 'carts'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     createdate = Column(DateTime, default=datetime.datetime.now)
     status = Column(String,nullable=False)
     user_id = Column(Integer, ForeignKey("enduser.id"))
@@ -209,7 +209,7 @@ class Cart(Base):
 
 class CartItem(Base):
     __tablename__ = 'cart_items'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     quantity = Column(Integer, nullable=False)
     createdate = Column(DateTime, default=datetime.datetime.now)
     food_id = Column(Integer, ForeignKey('foods.id'))
@@ -219,7 +219,7 @@ class CartItem(Base):
 
 class Order(Base):
     __tablename__ = 'orders'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     shop = Column(String, nullable=False)
     createdate = Column(DateTime, default=datetime.datetime.now)
     payment = Column(String,nullable=False)
@@ -232,7 +232,7 @@ class Order(Base):
 
 class OrderItem(Base):
     __tablename__ = 'order_items'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     price = Column(Float, nullable=False)
     quantity = Column(Integer, nullable=False)
     food_id = Column(Integer, ForeignKey('foods.id'))
@@ -242,7 +242,7 @@ class OrderItem(Base):
     
 class NotiModel(Base):
     __tablename__ = "notifications"
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     title = Column(String, nullable=False)
     tier = Column(String, nullable=False)
     description = Column(String, nullable=False)
@@ -250,7 +250,7 @@ class NotiModel(Base):
 
 class FaqModel(Base):
     __tablename__ = "faq"
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     question = Column(String,nullable=False)
     answer = Column(String,nullable=False)
     createdate = Column(DateTime, default=datetime.datetime.now)
@@ -258,7 +258,7 @@ class FaqModel(Base):
 class EventModel(Base):
     __tablename__ = 'events'
     id = Column(Integer, primary_key=True)
-    name = Column(String, unique=False, nullable=True)
+    name = Column(String, unique=False, nullable=True, autoincrement=True)
     reservedate = Column(Date, nullable=False)
     postImage = Column(ARRAY(JSON), nullable=True)
     description = Column(String, nullable=False)
