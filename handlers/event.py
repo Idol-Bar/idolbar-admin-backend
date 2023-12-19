@@ -60,6 +60,7 @@ async def update_events(id: int, data: CreateEventSchemaRequest,db: Session = De
     if not db_event:
         raise HTTPException(status_code=404, detail="Event ID not found.")
     db_event.name =  data.event.name
+    db_event.shop =  data.event.shop
     db_event.description =  data.event.description
     db_event.reservedate =  data.event.reservedate
     db_event.postImage =  data.event.postImage
