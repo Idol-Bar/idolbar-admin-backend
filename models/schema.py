@@ -266,6 +266,7 @@ class GetPostSchema(OrmBase):
     createdate: datetime
     publishdate: datetime
     postImage: Optional[List] = []
+    shop:Optional[str] = "shop1"
     class Config:
         orm_mode = True
 
@@ -276,6 +277,7 @@ class CreatePostSchema(OrmBase):
     description: str
     publishdate: date
     isnoti: bool
+    shop:Optional[str] = "shop1"
     postImage: Optional[List] = []
 
     class Config:
@@ -309,12 +311,14 @@ class GetFoodCategorySchema(OrmBase):
     name: str
     postImage: Optional[List] = []
     createdate: datetime
+    shop: Optional[str] = "shop1"
     class Config:
         orm_mode = True
 
 class CreateFoodCategorySchema(OrmBase):
     id: Optional[int]
     name: str
+    shop: str
     postImage: Optional[List] = []
     class Config:
         orm_mode = True
@@ -456,6 +460,7 @@ class MemberSchemaWithMeta(BaseModel):
 
 class EventSchema(BaseModel):
     id: Optional[int]
+    shop: Optional[str] = "shop1"
     name: str
     description: str
     reservedate: date
@@ -466,6 +471,7 @@ class EventSchema(BaseModel):
 
 
 class CreateEventSchema(BaseModel):
+    shop: Optional[str] = "shop1"
     name: str
     description: str
     reservedate: date

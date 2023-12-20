@@ -66,6 +66,7 @@ async def update_category(id: int, data: CreateFoodCategorySchemaRequest,db: Ses
         raise HTTPException(status_code=404, detail="Category ID not found.")
     db_category.name =  data.foodCategory.name
     db_category.postImage =  data.foodCategory.postImage
+    db_category.shop =  data.foodCategory.shop
     logger.info(data.foodCategory)
     db.commit()
     db.refresh(db_category)
