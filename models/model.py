@@ -269,3 +269,13 @@ class EventModel(Base):
     active = Column(Boolean, unique=False, default=True)
     shop = Column(String, nullable=False)
     createdate = Column(DateTime, default=datetime.datetime.now)
+
+
+class PaymentModel(Base):
+    __tablename__ = 'payments'
+    id = Column(Integer, primary_key=True)
+    name = Column(String, unique=False, nullable=False)
+    account = Column(String, unique=False, nullable=False)
+    shop = Column(String, nullable=False)
+    postImage = Column(ARRAY(JSON), nullable=True)
+    createdate = Column(DateTime, default=datetime.datetime.now)
