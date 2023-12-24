@@ -182,7 +182,7 @@ class AddPointSchema(OrmBase):
 
 class PayPointSchema(OrmBase):
     id: Optional[int]
-    userId: int
+    userId: str ## Phone userId  = phone
     total_amt: int
     pay_amt:int
 
