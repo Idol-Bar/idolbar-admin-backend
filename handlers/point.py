@@ -32,8 +32,13 @@ def get_user_pt(id: int, db: Session = Depends(get_db)):
 async def add_point(
     request: Request, point_info: PayPointSchema, db: Session = Depends(get_db)#, current_user: CurrentUser = Depends(get_current_user)
 ):
+    switch_to_id = db.query(EndUser).filter(EndUser.phoneno==point_info.userId).first()
+    if not switch_to_id:
+        raise HTTPException(status_code=400, detail="User Not Found")
+    point_info.userId = switch_to_id.id
     logger.info(point_info.dict())
     logger.info("Validate Point and Pay")
+
     owner_points_count = db.query(Point).filter(Point.owner_id == point_info.userId).all()
     points = len(owner_points_count) if owner_points_count is not None else 0
     tier_rule = db.query(TierRule).filter(and_(TierRule.lower <= points, TierRule.higher >= points)).first()
@@ -155,3 +160,69 @@ async def add_point(
 #     db.add(new_transition)
 # db.commit()
 #rule = db.query(TierRule).filter(TierRule.lower <= number, TierRule.higher >= number).first()
+
+
+
+
+# @router.post("/points", tags=["point"])
+# async def add_point(
+#     request: Request, point_info: PayPointSchema, db: Session = Depends(get_db)#, current_user: CurrentUser = Depends(get_current_user)
+# ):
+#     logger.info(point_info.dict())
+#     logger.info("Validate Point and Pay")
+#     owner_points_count = db.query(Point).filter(Point.owner_id == point_info.userId).all()
+#     points = len(owner_points_count) if owner_points_count is not None else 0
+#     tier_rule = db.query(TierRule).filter(and_(TierRule.lower <= points, TierRule.higher >= points)).first()
+#     require_amt = point_info.total_amt - point_info.pay_amt
+#     wallet_pts = tier_rule.unit * points
+    
+#     #archive_pts = calc_percent(amount=point_info.pay_amt,percentage=tier_rule.percentage)
+#     owner = db.query(EndUser).get(point_info.userId)
+#     archive_pts = int(point_info.pay_amt / tier_rule.unit)
+#     if require_amt == 0 :
+#         logger.info("Pay With Money")
+#         #totally money
+#         for _ in range(archive_pts):
+#             new_transition = Transition(fromUser="casher",toUser=owner.username,status="reward")
+#             new_point = Point(unit=1, owner=owner,transitions=[new_transition])
+#             db.add(new_point)
+#             db.add(new_transition)
+#         reward_point_log = PointLogs(amount=point_info.total_amt,point=archive_pts,tier=tier_rule.name,username=owner.username,
+#                         phoneno=owner.phoneno,status="Reward",toUser=owner.username,fromUser="admin")
+#         db.add(reward_point_log)
+#         db.commit()
+
+#         owner_points_count = db.query(Point).filter(Point.owner_id == point_info.userId).all()
+#         updated_points = len(owner_points_count) if owner_points_count is not None else 0
+#         return {"amount":point_info.total_amt,"percentage":tier_rule.percentage,"tier":tier_rule.name,"total":point_info.total_amt,"reward":archive_pts,"beforePoint":points,"afterPoint":updated_points}
+#     elif require_amt>0: 
+#         if wallet_pts  < require_amt:
+#             raise HTTPException(status_code=400, detail="Not Enough Point.")
+#         logger.info("Pay With Money and Point")
+#         #pay point with require
+#         pay_pts = int(require_amt/tier_rule.unit)
+#         db_points = db.query(Point).limit(pay_pts).all()
+#         for point in db_points:
+#             new_transition = Transition(fromUser=owner.username,toUser="admin",status="pay")
+#             point.owner = None
+#             point.transitions.append(new_transition)
+#         pay_point_log = PointLogs(amount=point_info.total_amt,point=pay_pts,tier=tier_rule.name,username=owner.username,
+#                             phoneno=owner.phoneno,status="Pay Point",fromUser=owner.username,toUser="admin")
+#         db.add(pay_point_log)
+#         ## take reward for money 50000 - 30000 = 20000
+#         for _ in range(archive_pts):
+#             new_transition = Transition(fromUser="casher",toUser=owner.username,status="reward")
+#             new_point = Point(unit=1, owner=owner,transitions=[new_transition])
+#             db.add(new_point)
+#             db.add(new_transition)
+#         reward_point_log = PointLogs(amount=point_info.total_amt,point=archive_pts,tier=tier_rule.name,username=owner.username,
+#                         phoneno=owner.phoneno,status="Reward",toUser=owner.username,fromUser="admin")
+#         db.add(reward_point_log)
+#         db.commit()
+#         owner_points_count = db.query(Point).filter(Point.owner_id == point_info.userId).all()
+#         updated_points = len(owner_points_count) if owner_points_count is not None else 0
+#         return {"amount":point_info.total_amt,"percentage":tier_rule.percentage,"tier":tier_rule.name,"total":point_info.total_amt,"reward":archive_pts,"beforePoint":points,"afterPoint":updated_points}
+#     else:
+#         raise HTTPException(status_code=400, detail="Not Enough Point.")
+   
+   
