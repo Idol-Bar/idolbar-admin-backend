@@ -58,9 +58,11 @@ async def add_point(
             db.add(new_transition)
         reward_point_log = PointLogs(amount=point_info.total_amt,point=archive_pts,tier=tier_rule.name,username=owner.username,
                         phoneno=owner.phoneno,status="Reward",toUser=owner.username,fromUser="admin")
+        money_log = Money(amount=point_info.pay_amt,user_id=point_info.userId,status=f"pay {point_info.pay_amt} MMK ")
+        db.add(money_log)
         db.add(reward_point_log)
         db.commit()
-
+        
         owner_points_count = db.query(Point).filter(Point.owner_id == point_info.userId).all()
         updated_points = len(owner_points_count) if owner_points_count is not None else 0
         return {"amount":point_info.total_amt,"percentage":tier_rule.percentage,"tier":tier_rule.name,"total":point_info.total_amt,"reward":archive_pts,"beforePoint":points,"afterPoint":updated_points}
@@ -86,6 +88,8 @@ async def add_point(
             db.add(new_transition)
         reward_point_log = PointLogs(amount=point_info.total_amt,point=archive_pts,tier=tier_rule.name,username=owner.username,
                         phoneno=owner.phoneno,status="Reward",toUser=owner.username,fromUser="admin")
+        money_log = Money(amount=point_info.pay_amt,user_id=point_info.userId,status=f"pay {point_info.pay_amt} MMK ")
+        db.add(money_log)
         db.add(reward_point_log)
         db.commit()
         owner_points_count = db.query(Point).filter(Point.owner_id == point_info.userId).all()
