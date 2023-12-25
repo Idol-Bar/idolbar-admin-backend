@@ -10,7 +10,7 @@ from models.schema import (
 )
 from typing import List, Dict
 from .database import get_db
-from models.model import Reservation, Tables
+from models.model import Reservation, Tables,EndUser
 from sqlalchemy.orm import Session
 from modules.dependency import get_current_user
 from modules.token import AuthToken
@@ -41,14 +41,20 @@ async def get_reservation(
 async def add_reservation(
     request: Request, reservation: CreateReserveSchemaRequest, db: Session = Depends(get_db)
 ):
+
     logger.info(reservation.dict())
     data = reservation.reservation
     logger.info(data.tables[0])
+    receive = db.query(EndUser).filter(EndUser.phoneno ==data.phoneno).first()
+    if not receive:
+        logger.info("No User with Phone")
+        raise HTTPException(status_code=400, detail="User Not Found.")
+
     is_reserved = db.query(Reservation).join(Tables, Reservation.tables).filter(func.date(Reservation.reservedate) == data.reservedate,Tables.name==data.tables[0],Tables.shop==data.shop).first()
     if is_reserved:
         raise HTTPException(status_code=400, detail="Reservation already registered.")
     tables = Tables(name=data.tables[0],reservedate=data.reservedate,shop=data.shop)
-    order = Reservation(username=data.username, phoneno=data.phoneno,reservedate=data.reservedate,reservetime=data.reservetime,
+    order = Reservation(userId=receive.id,username=data.username, phoneno=data.phoneno,reservedate=data.reservedate,reservetime=data.reservetime,
                     description=data.description,status=data.status,active=True,tables=[tables])
     db.add(order)
     db.add(tables)
