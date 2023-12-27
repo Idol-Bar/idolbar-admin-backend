@@ -40,7 +40,7 @@ async def add_noti(
     db.commit()
     db.refresh(notification)
     data_message = {"postType":"notification","notiId":f"{notification.id}"}
-    message = messaging.Message(notification=messaging.Notification(title=data.notification.title,body=data.notification.description),android=messaging.AndroidConfig( priority='normal', notification=messaging.AndroidNotification( default_sound=True ), ), topic="idolbar",data=data_message)
+    message = messaging.Message(notification=messaging.Notification(title=data.notification.title,body=data.notification.description),android=messaging.AndroidConfig( priority='normal', notification=messaging.AndroidNotification( default_sound=True ), ), topic=data.notification.tier,data=data_message)
     response = messaging.send(message)
     return {"notification":notification}
 
