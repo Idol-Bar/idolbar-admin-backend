@@ -125,7 +125,9 @@ class ClientSchema(OrmBase):
     status: str
     active: Optional[bool] = False
     tier: List[TierSchema]  = []
- 
+    state: Optional[str]  = ""
+    division: Optional[str] = "" 
+    gender: Optional[str] = "" 
     postImage: Optional[List] = []
 
     class Config:
@@ -490,6 +492,7 @@ class PaymentSchema(BaseModel):
     id: Optional[int]
     name: str
     account: str
+    accname: str
     shop: Optional[str] = "shop1"
     createdate: date
     #postImage: Optional[List] = []
@@ -501,6 +504,7 @@ class PaymentSchema(BaseModel):
 class CreatePaymentSchema(BaseModel):
     name: str
     account: str
+    accname: str
     shop: str
     #postImage: Optional[List] = []
 
