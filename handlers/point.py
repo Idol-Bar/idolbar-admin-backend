@@ -39,15 +39,18 @@ async def add_point(
     logger.info(point_info.dict())
     logger.info("Validate Point and Pay")
 
-    owner_points_count = db.query(Point).filter(Point.owner_id == point_info.userId).all()
-    points = len(owner_points_count) if owner_points_count is not None else 0
+    #owner_points_count = db.query(Point).filter(Point.owner_id == point_info.userId).all()
+    #points = len(owner_points_count) if owner_points_count is not None else 0
+    owner_points_count = db.query(func.sum(Money.amount)).filter(Money.user_id == str(point_info.userId)).scalar()
+    points = owner_points_count if owner_points_count is not None else 0
     tier_rule = db.query(TierRule).filter(and_(TierRule.lower <= points, TierRule.higher >= points)).first()
     require_amt = point_info.total_amt - point_info.pay_amt
     wallet_pts = tier_rule.unit * points
     
     #archive_pts = calc_percent(amount=point_info.pay_amt,percentage=tier_rule.percentage)
     owner = db.query(EndUser).get(point_info.userId)
-    archive_pts = int(point_info.pay_amt / tier_rule.unit)
+    #archive_pts = int(point_info.pay_amt / tier_rule.unit)
+    archive_pts = int((tier_rule.percentage / 100) * point_info.pay_amt)
     if require_amt == 0 :
         logger.info("Pay With Money")
         #totally money
