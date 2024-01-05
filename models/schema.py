@@ -436,6 +436,8 @@ class GetOrder(BaseModel):
     status: str
     description: str
     shop: Optional[str] = "shop1"
+    tables:str
+    reservedate:date
     order_items: Optional[List[OrderItemSchema]] = None
 
     class Config:
