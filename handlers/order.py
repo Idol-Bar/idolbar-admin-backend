@@ -17,8 +17,19 @@ from modules.token import AuthToken
 from sqlalchemy import desc,Enum
 from modules.utils import pagination
 from firebase_admin import messaging
+from datetime import datetime, date
 router = APIRouter()
 auth_handler = AuthToken()
+
+
+@router.get("/orderDetails", tags=["order"], response_model=Dict[str,List[GetOrder]])
+async def get_orders(
+    reservedate: date = date.today() , tableId: str=None,
+    db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
+):
+    order_data = db.query(Order).filter(Order.reservedate==reservedate,Order.tables==tableId).order_by(desc(Order.createdate)).all()
+    print(order_data)
+    return {"order-detail":order_data}
 
 
 @router.get("/orders", tags=["order"],response_model=GetOrderSchemaWithMeta)#, response_model=Dict[str,List[GetOrder]])
