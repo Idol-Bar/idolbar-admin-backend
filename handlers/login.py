@@ -24,8 +24,8 @@ def login(user_details: LoginSchema, db: Session = Depends(get_db)):
         return HTTPException(status_code=400, detail="Invalid user")
     if not auth_handler.verify_password(user_details.password, user.password):
         return HTTPException(status_code=400, detail="Invalid password")
-    if not user.role[0].name=="admin":
-        return HTTPException(status_code=400, detail="Invalid user")
+    #if not user.role[0].name=="admin":
+    #    return HTTPException(status_code=400, detail="Invalid user")
     access_token = auth_handler.encode_token(user.username, user.role[0].name, user.id)
     refresh_token = auth_handler.encode_refresh_token(
         user.username, user.role[0].name, user.id
