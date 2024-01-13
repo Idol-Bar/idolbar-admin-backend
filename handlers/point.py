@@ -74,8 +74,9 @@ async def add_point(
             raise HTTPException(status_code=400, detail="Not Enough Point.")
         logger.info("Pay With Money and Point")
         #pay point with require
-        pay_pts = int(require_amt/tier_rule.unit)
-        db_points = db.query(Point).limit(pay_pts).all()
+        #pay_pts = int(require_amt/tier_rule.unit)
+        pay_pts = require_amt
+        db_points = db.query(Point).filter(Point.owner_id == point_info.userId).limit(pay_pts).all()
         for point in db_points:
             new_transition = Transition(fromUser=owner.username,toUser="admin",status="pay")
             point.owner = None
