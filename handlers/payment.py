@@ -63,6 +63,7 @@ async def update_payments(id: int, data: CreatePaymentSchemaRequest,db: Session 
     db_payment.shop =  data.payment.shop
     db_payment.account =  data.payment.account
     db_payment.accname =  data.payment.accname
+    db_payment.postImage =  data.payment.postImage
     db.commit()
     db.refresh(db_payment)
     return {"payment":db_payment}
