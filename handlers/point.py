@@ -69,6 +69,21 @@ async def add_point(
         
         owner_points_count = db.query(Point).filter(Point.owner_id == point_info.userId).all()
         updated_points = len(owner_points_count) if owner_points_count is not None else 0
+
+        ###
+        try:
+            db_member = db.query(EndUser).get(point_info.userId)
+            money = db.query(func.sum(Money.amount)).filter(Money.user_id == str(point_info.userId)).scalar()
+            unit = money if money is not None else 0
+            tier_rule = db.query(TierRule).filter(and_(TierRule.lower <= unit, TierRule.higher >= unit)).first()
+            user_tier = tier_rule.name if tier_rule else "Unavaliable"
+            tier = Tier(name=user_tier)
+            db_member.tier = [tier]
+            db.commit()
+            db.refresh(db_member)
+        except Exception as e:
+            logger.info(e)
+        ###
         return {"amount":point_info.total_amt,"percentage":tier_rule.percentage,"tier":tier_rule.name,"total":point_info.total_amt,"reward":archive_pts,"beforePoint":points,"afterPoint":updated_points}
     elif require_amt>0: 
         if wallet_pts  < require_amt:
@@ -99,6 +114,21 @@ async def add_point(
         db.commit()
         owner_points_count = db.query(Point).filter(Point.owner_id == point_info.userId).all()
         updated_points = len(owner_points_count) if owner_points_count is not None else 0
+        ###
+        try:
+            db_member = db.query(EndUser).get(point_info.userId)
+
+            money = db.query(func.sum(Money.amount)).filter(Money.user_id == str(point_info.userId)).scalar()
+            unit = money if money is not None else 0
+            tier_rule = db.query(TierRule).filter(and_(TierRule.lower <= unit, TierRule.higher >= unit)).first()
+            user_tier = tier_rule.name if tier_rule else "Unavaliable"
+            tier = Tier(name=user_tier)
+            db_member.tier = [tier]
+            db.commit()
+            db.refresh(db_member)
+        except Exception as e:
+            logger.info(e)
+        ###
         return {"amount":point_info.total_amt,"percentage":tier_rule.percentage,"tier":tier_rule.name,"total":point_info.total_amt,"reward":archive_pts,"beforePoint":points,"afterPoint":updated_points}
     else:
         raise HTTPException(status_code=400, detail="Not Enough Point.")
