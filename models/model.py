@@ -123,7 +123,7 @@ class PointLogs(Base):
     createdate = Column(DateTime, default=datetime.datetime.now)
     status = Column(String, nullable=False)
     info = Column(ARRAY(JSON), nullable=True)
-
+    shop = Column(String, nullable=False, default="share")
 
 class BannerModel(Base):
     __tablename__ = "banners"
