@@ -20,9 +20,9 @@ auth_handler = AuthToken()
 @router.get("/reports/{status}", tags=["member"])
 def get_member_byid(status: str, db: Session = Depends(get_db)):
     #points_with_no_owner = db.query(Point).filter(Point.owner == None).count()
-    points_with_owner = db.query(Point).filter(Point.owner!=None).count()
-    pay_point = db.query(Transition).filter(Transition.fromUser=="admin").count()
-    receive_point = db.query(Transition).filter(Transition.toUser=="admin").count()
-    
+    points_with_owner = db.query(Point).count()
+    pay_point = db.query(Point).filter(Point.owner_id!=None).count()
+    receive_point = db.query(Point).filter(Point.owner_id==None).count()
+    print(receive_point)
     report = {"id":1,"total_point":points_with_owner,"pay_point":pay_point,"receive_point":receive_point}
     return {"report":report}

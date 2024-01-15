@@ -56,20 +56,20 @@ async def get_paypoint(
 
 @router.get("/rewardpts", tags=["transition"])
 async def get_rewardpts(
-    page: int = 1 , per_page: int=10,
+    page: int = 1 , per_page: int=10,shop:str="shop1",
     db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
 ):
     #members = db.query(User).all()
-    count = db.query(PointLogs).filter(PointLogs.status=="Reward").count()
+    count = db.query(PointLogs).filter(PointLogs.status=="Reward",PointLogs.shop==shop).count()
     meta_data =  pagination(page,per_page,count)
-    transition = db.query(PointLogs).filter(PointLogs.status=="Reward").order_by(desc(PointLogs.createdate)).limit(per_page).offset((page - 1) * per_page).all()
+    transition = db.query(PointLogs).filter(PointLogs.status=="Reward",PointLogs.shop==shop).order_by(desc(PointLogs.createdate)).limit(per_page).offset((page - 1) * per_page).all()
     return {"rewardpt":transition,"meta":meta_data}
 
 
 
 @router.get("/searchtransitions", tags=["transition"])
-def search_client(phoneno: str = None, db: Session = Depends(get_db)):
+def search_client(phoneno: str = None,shop: str = "shop1", db: Session = Depends(get_db)):
     if not phoneno or not len(phoneno)>0:
         return {"searchclient":[]}
-    transition = db.query(PointLogs).filter(PointLogs.phoneno.contains(phoneno)).all()
+    transition = db.query(PointLogs).filter(PointLogs.phoneno.contains(phoneno),PointLogs.shop==shop).all()
     return {"searchtransition":transition}

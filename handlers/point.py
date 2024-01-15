@@ -30,8 +30,9 @@ def get_user_pt(id: int, db: Session = Depends(get_db)):
 
 @router.post("/points", tags=["point"])
 async def add_point(
-    request: Request, point_info: PayPointSchema, db: Session = Depends(get_db)#, current_user: CurrentUser = Depends(get_current_user)
+    request: Request, point_info: PayPointSchema, db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
 ):
+    shop_name = current_user["role"]
     switch_to_id = db.query(EndUser).filter(EndUser.phoneno==point_info.userId).first()
     if not switch_to_id:
         raise HTTPException(status_code=400, detail="User Not Found")
@@ -60,7 +61,7 @@ async def add_point(
             db.add(new_point)
             db.add(new_transition)
         reward_point_log = PointLogs(amount=point_info.total_amt,point=archive_pts,tier=tier_rule.name,username=owner.username,
-                        phoneno=owner.phoneno,status="Reward",toUser=owner.username,fromUser="admin")
+                        phoneno=owner.phoneno,status="Reward",toUser=owner.username,fromUser="admin",shop=shop_name)
         money_log = Money(amount=point_info.pay_amt,user_id=point_info.userId,status=f"pay {point_info.pay_amt} MMK ")
         db.add(money_log)
         db.add(reward_point_log)
@@ -82,7 +83,7 @@ async def add_point(
             point.owner = None
             point.transitions.append(new_transition)
         pay_point_log = PointLogs(amount=point_info.total_amt,point=pay_pts,tier=tier_rule.name,username=owner.username,
-                            phoneno=owner.phoneno,status="Pay Point",fromUser=owner.username,toUser="admin")
+                            phoneno=owner.phoneno,status="Pay Point",fromUser=owner.username,toUser="admin",shop=shop_name)
         db.add(pay_point_log)
         ## take reward for money 50000 - 30000 = 20000
         for _ in range(archive_pts):
@@ -91,7 +92,7 @@ async def add_point(
             db.add(new_point)
             db.add(new_transition)
         reward_point_log = PointLogs(amount=point_info.total_amt,point=archive_pts,tier=tier_rule.name,username=owner.username,
-                        phoneno=owner.phoneno,status="Reward",toUser=owner.username,fromUser="admin")
+                        phoneno=owner.phoneno,status="Reward",toUser=owner.username,fromUser="admin",shop=shop_name)
         money_log = Money(amount=point_info.pay_amt,user_id=point_info.userId,status=f"pay {point_info.pay_amt} MMK ")
         db.add(money_log)
         db.add(reward_point_log)
@@ -234,3 +235,37 @@ async def add_point(
 #         raise HTTPException(status_code=400, detail="Not Enough Point.")
    
    
+@router.get("/getBalance/{phoneno}", tags=["profile"])
+async def get_profile(
+   phoneno: str, db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
+):
+    user = db.query(EndUser).filter(EndUser.phoneno ==phoneno).first()
+    print(user.username)
+    if not user:
+        logger.info("No User with Phone")
+        raise HTTPException(status_code=400, detail="User Not Found.")
+    owner_points_count = db.query(Point).filter(Point.owner_id == user.id).all()
+    points = len(owner_points_count) if owner_points_count is not None else 0
+    #owner_points_count = db.query(Money).filter(Money.user_id == str(current_user["id"])).all()
+    owner_money = db.query(func.sum(Money.amount)).filter(Money.user_id == str( user.id)).scalar()
+    unit = owner_money if owner_money is not None else 0
+    
+    tier_rule = db.query(TierRule).filter(and_(TierRule.lower <= unit, TierRule.higher >= unit)).first()
+    if not user:
+        raise HTTPException(status_code=401, detail="User ID not found.")
+    user_tier = tier_rule.name if tier_rule else "Unavaliable"
+    profile_data = {
+        "id": user.id,
+        "username": user.username,
+        "birthday": user.birthday,
+        "postImage": user.postImage,
+        "phoneno": user.phoneno,
+        "createdate": user.createdate,
+        "code": user.code,
+        "state": user.state,
+        "division": user.division,
+        "unit":points,
+        #"tier": [{"name": tier.name for tier in user.tier}]
+        "tier":user_tier
+    }
+    return {"profile":profile_data}
