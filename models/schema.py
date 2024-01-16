@@ -434,7 +434,7 @@ class GetOrder(BaseModel):
     user_id: int
     enduser:EndUserSchema
     status: str
-    description: str
+    description: Optional[str] = ""
     shop: Optional[str] = "shop1"
     tables:str
     reservedate:date
@@ -497,7 +497,7 @@ class PaymentSchema(BaseModel):
     accname: str
     shop: Optional[str] = "shop1"
     createdate: date
-    #postImage: Optional[List] = []
+    postImage: Optional[List] = []
 
     class Config:
         orm_mode = True
@@ -508,7 +508,7 @@ class CreatePaymentSchema(BaseModel):
     account: str
     accname: str
     shop: str
-    #postImage: Optional[List] = []
+    postImage: Optional[List] = []
 
     class Config:
         orm_mode = True
