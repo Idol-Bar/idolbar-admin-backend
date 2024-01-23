@@ -61,7 +61,7 @@ async def add_point(
             db.add(new_point)
             db.add(new_transition)
         reward_point_log = PointLogs(amount=point_info.total_amt,point=archive_pts,tier=tier_rule.name,username=owner.username,
-                        phoneno=owner.phoneno,status="Reward",toUser=owner.username,fromUser="admin",shop=shop_name)
+                        phoneno=owner.phoneno,status="Reward",toUser=owner.username,fromUser=current_user["username"],shop=shop_name)
         money_log = Money(amount=point_info.pay_amt,user_id=point_info.userId,status=f"pay {point_info.pay_amt} MMK ")
         db.add(money_log)
         db.add(reward_point_log)
@@ -98,7 +98,7 @@ async def add_point(
             point.owner = None
             point.transitions.append(new_transition)
         pay_point_log = PointLogs(amount=point_info.total_amt,point=pay_pts,tier=tier_rule.name,username=owner.username,
-                            phoneno=owner.phoneno,status="Pay Point",fromUser=owner.username,toUser="admin",shop=shop_name)
+                            phoneno=owner.phoneno,status="Pay Point",fromUser=owner.username,toUser=current_user["username"],shop=shop_name)
         db.add(pay_point_log)
         ## take reward for money 50000 - 30000 = 20000
         for _ in range(archive_pts):
@@ -107,7 +107,7 @@ async def add_point(
             db.add(new_point)
             db.add(new_transition)
         reward_point_log = PointLogs(amount=point_info.total_amt,point=archive_pts,tier=tier_rule.name,username=owner.username,
-                        phoneno=owner.phoneno,status="Reward",toUser=owner.username,fromUser="admin",shop=shop_name)
+                        phoneno=owner.phoneno,status="Reward",toUser=owner.username,fromUser=current_user["username"],shop=shop_name)
         money_log = Money(amount=point_info.pay_amt,user_id=point_info.userId,status=f"pay {point_info.pay_amt} MMK ")
         db.add(money_log)
         db.add(reward_point_log)
