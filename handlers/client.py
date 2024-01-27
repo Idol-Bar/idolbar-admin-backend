@@ -42,6 +42,7 @@ async def update_client_phone(id: int, data: UpdateClientPhoneSchema,db: Session
     if not db_client:
         raise HTTPException(status_code=404, detail="Customer ID not found.")
     db_client.phoneno =  data.client.phoneno
+    db_client.active =  data.client.active
     db.commit()
     db.refresh(db_client)
     return {"client":db_client}

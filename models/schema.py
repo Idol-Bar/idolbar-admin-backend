@@ -119,6 +119,7 @@ class TierSchema(OrmBase):
 
 class ClientPhoneSchema(OrmBase):
     phoneno: str
+    active:bool
     id:Optional[int]
     class Config:
         orm_mode = True
