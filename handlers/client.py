@@ -4,7 +4,7 @@ from fastapi.logger import logger
 from models.schema import (
     CurrentUser,
     ClientSchemaWithMeta,
-    ClientSchema
+    ClientSchema,UpdateClientPhoneSchema
 )
 from typing import List, Dict
 from .database import get_db
@@ -36,6 +36,16 @@ def get_client_byid(id: int, db: Session = Depends(get_db)):
     return {"client":client}
 
 
+@router.put("/clients/{id}", tags=["client"])
+async def update_client_phone(id: int, data: UpdateClientPhoneSchema,db: Session = Depends(get_db)):
+    db_client = db.query(EndUser).get(id)
+    if not db_client:
+        raise HTTPException(status_code=404, detail="Customer ID not found.")
+    db_client.phoneno =  data.client.phoneno
+    db_client.active =  data.client.active
+    db.commit()
+    db.refresh(db_client)
+    return {"client":db_client}
 
 @router.get("/getpoint/{id}", tags=["client"])
 def get_point_byid(id: int, db: Session = Depends(get_db)):

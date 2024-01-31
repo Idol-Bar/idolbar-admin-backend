@@ -222,6 +222,7 @@ class CartItem(Base):
     food = relationship('FoodModel')
     cart_id = Column(Integer, ForeignKey('carts.id'))
     cart = relationship('Cart', back_populates='cart_items')
+    description = Column(String, nullable=True)
 
 class Order(Base):
     __tablename__ = 'orders'
@@ -249,6 +250,7 @@ class OrderItem(Base):
     food = relationship('FoodModel')
     order_id = Column(Integer, ForeignKey('orders.id'))
     order = relationship('Order', back_populates='order_items')
+    description = Column(String, nullable=True)
     
 class NotiModel(Base):
     __tablename__ = "notifications"
@@ -286,4 +288,14 @@ class PaymentModel(Base):
     accname = Column(String, unique=False, nullable=False)
     shop = Column(String, nullable=False)
     postImage = Column(ARRAY(JSON), nullable=True)
+    createdate = Column(DateTime, default=datetime.datetime.now)
+
+class ReviewModel(Base):
+    __tablename__ = "review"
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String,nullable=False)
+    description = Column(String,nullable=False)
+    status = Column(String,nullable=False)
+    postImage = Column(ARRAY(JSON), nullable=True)
+    owner = Column(String,nullable=False)
     createdate = Column(DateTime, default=datetime.datetime.now)

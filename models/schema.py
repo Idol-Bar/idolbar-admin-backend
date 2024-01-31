@@ -117,6 +117,16 @@ class CreateMemberSchemaRequest(BaseModel):
 class TierSchema(OrmBase):
     name: str
 
+class ClientPhoneSchema(OrmBase):
+    phoneno: str
+    active:bool
+    id:Optional[int]
+    class Config:
+        orm_mode = True
+    
+class UpdateClientPhoneSchema(BaseModel):
+    client: ClientPhoneSchema
+
 class ClientSchema(OrmBase):
     username: str
     birthday: str
@@ -187,6 +197,7 @@ class PayPointSchema(OrmBase):
     userId: str ## Phone userId  = phone
     total_amt: int
     pay_amt:int
+    pay_pt:int
 
 ### Reservation
 class CreateTableSchema(OrmBase):
@@ -515,3 +526,26 @@ class CreatePaymentSchema(BaseModel):
 
 class CreatePaymentSchemaRequest(BaseModel):
     payment: CreatePaymentSchema
+
+
+class GetReviewSchema(OrmBase):
+    id: int
+    title: str
+    description: str
+    postImage: Optional[List] = []
+    createdate: datetime
+    class Config:
+        orm_mode = True
+
+class CreateReviewSchema(OrmBase):
+    id: Optional[int]
+    title: str
+    description: str
+    status:Optional[str]="CONFIRM"
+    postImage: Optional[List] = []
+    owner:Optional[str]="ADMIN"
+    class Config:
+        orm_mode = True
+
+class CreateReviewSchemaRequest(BaseModel):
+    review: CreateReviewSchema

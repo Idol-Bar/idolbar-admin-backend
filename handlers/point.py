@@ -47,7 +47,9 @@ async def add_point(
     tier_rule = db.query(TierRule).filter(and_(TierRule.lower <= points, TierRule.higher >= points)).first()
     require_amt = point_info.total_amt - point_info.pay_amt
     wallet_pts = tier_rule.unit * points
-    
+    logger.info(require_amt)
+    if require_amt != point_info.pay_pt:
+        raise HTTPException(status_code=400, detail="Point Does Not Match")
     #archive_pts = calc_percent(amount=point_info.pay_amt,percentage=tier_rule.percentage)
     owner = db.query(EndUser).get(point_info.userId)
     #archive_pts = int(point_info.pay_amt / tier_rule.unit)
