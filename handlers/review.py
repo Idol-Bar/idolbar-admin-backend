@@ -25,10 +25,16 @@ async def get_reviews(
     page: int = 1 , per_page: int=10,owner:str="",status:str="",
     db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
 ):
-    count = db.query(ReviewModel).filter(ReviewModel.status==status,ReviewModel.owner==owner).count()
-    meta_data =  pagination(page,per_page,count)
-    review = db.query(ReviewModel).filter(ReviewModel.status==status,ReviewModel.owner==owner).order_by(desc(ReviewModel.createdate)).limit(per_page).offset((page - 1) * per_page).all()
-    return jsonable_encoder({"review":review,"meta":meta_data})
+    if owner=="ADMIN":
+        count = db.query(ReviewModel).filter(ReviewModel.status==status,ReviewModel.owner==owner).count()
+        meta_data =  pagination(page,per_page,count)
+        review = db.query(ReviewModel).filter(ReviewModel.status==status,ReviewModel.owner==owner).order_by(desc(ReviewModel.createdate)).limit(per_page).offset((page - 1) * per_page).all()
+        return jsonable_encoder({"review":review,"meta":meta_data})
+    else:
+        count = db.query(ReviewModel).filter(ReviewModel.status==status,ReviewModel.owner!="ADMIN").count()
+        meta_data =  pagination(page,per_page,count)
+        review = db.query(ReviewModel).filter(ReviewModel.status==status,ReviewModel.owner!="ADMIN").order_by(desc(ReviewModel.createdate)).limit(per_page).offset((page - 1) * per_page).all()
+        return jsonable_encoder({"review":review,"meta":meta_data})
 
 
 
