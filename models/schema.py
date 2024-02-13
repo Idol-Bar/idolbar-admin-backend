@@ -458,6 +458,7 @@ class GetOrderSchemaWithMeta(BaseModel):
     order: List[GetOrder] = []
     meta : MetaSchema
 
+
 class OrderStatus(BaseModel):
     status:str
     class Config:
@@ -549,3 +550,39 @@ class CreateReviewSchema(OrmBase):
 
 class CreateReviewSchemaRequest(BaseModel):
     review: CreateReviewSchema
+
+
+class GetParcel(BaseModel):
+    id: Optional[int]
+    createdate: datetime
+    payment: str
+    postImage: Optional[List] = []
+    user_id: int
+    enduser:EndUserSchema
+    status: str
+    description: Optional[str] = ""
+    shop: Optional[str] = "shop1"
+    tables:str
+    reservedate:date
+    order_items: Optional[List[OrderItemSchema]] = None
+
+    class Config:
+        orm_mode = True
+
+class GetParcelSchemaWithMeta(BaseModel):
+    parcel: List[GetParcel] = []
+    meta : MetaSchema
+
+class ParcelStatus(BaseModel):
+    status:str
+    class Config:
+        orm_mode = True
+
+class UpdateParcelStatus(BaseModel):
+    parcel: ParcelStatus
+
+
+
+class GetParcelSearchSchemaWithMeta(BaseModel):
+    parcelSearch: List[GetParcel] = []
+    meta : MetaSchema
