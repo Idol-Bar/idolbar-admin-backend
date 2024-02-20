@@ -454,6 +454,10 @@ class GetOrder(BaseModel):
     class Config:
         orm_mode = True
 
+class GetOrderSearchSchemaWithMeta(BaseModel):
+    orderSearch: List[GetOrder] = []
+    meta : MetaSchema
+
 class GetOrderSchemaWithMeta(BaseModel):
     order: List[GetOrder] = []
     meta : MetaSchema

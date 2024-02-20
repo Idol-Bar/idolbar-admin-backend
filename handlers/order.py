@@ -5,7 +5,7 @@ from models.schema import (
     CurrentUser,
     GetOrder,
     GetOrderSchemaWithMeta,
-    UpdateOrderStatus
+    UpdateOrderStatus,GetOrderSearchSchemaWithMeta
  
 )
 from typing import List, Dict
@@ -14,13 +14,22 @@ from models.model import Cart,CartItem,FoodModel,EndUser,Order,OrderItem
 from sqlalchemy.orm import Session
 from modules.dependency import get_current_user
 from modules.token import AuthToken
-from sqlalchemy import desc,Enum
+from sqlalchemy import desc,Enum,func
 from modules.utils import pagination
 from firebase_admin import messaging
 from datetime import datetime, date
 router = APIRouter()
 auth_handler = AuthToken()
 
+
+
+@router.get("/orderSearches", tags=["parcel"],response_model=GetOrderSearchSchemaWithMeta)#, response_model=Dict[str,List[GetOrder]])
+async def search_orders(
+   reservedate:date = date.today(),
+    db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
+):
+    order_data = db.query(Order).filter(func.date(Order.createdate)==reservedate,Order.tables!="parcel").order_by(desc(Order.createdate)).all()
+    return {"orderSearch":order_data,"meta":{"total_pages":1}}
 
 @router.get("/orderDetails", tags=["order"], response_model=Dict[str,List[GetOrder]])
 async def get_orders(
