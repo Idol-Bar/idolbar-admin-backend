@@ -272,7 +272,6 @@ async def get_profile(
    phoneno: str, db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
 ):
     user = db.query(EndUser).filter(EndUser.phoneno ==phoneno).first()
-    print(user.username)
     if not user:
         logger.info("No User with Phone")
         raise HTTPException(status_code=400, detail="User Not Found.")
@@ -301,3 +300,20 @@ async def get_profile(
         "tier":user_tier
     }
     return {"profile":profile_data}
+
+   
+@router.get("/calcPoints/{phoneno}/{point}/{amount}", tags=["profile"])
+async def get_calc_points(
+   phoneno: str,point:int,amount:int, db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
+):
+    user = db.query(EndUser).filter(EndUser.phoneno ==phoneno).first()
+    if not user:
+        logger.info("No User with Phone")
+        raise HTTPException(status_code=400, detail="User Not Found.")
+    owner_points_count = db.query(func.sum(Money.amount)).filter(Money.user_id == str(user.id)).scalar()
+    points = owner_points_count if owner_points_count is not None else 0
+    tier_rule = db.query(TierRule).filter(and_(TierRule.lower <= points, TierRule.higher >= points)).first()
+    amt = amount - (tier_rule.unit*point)
+    if amt < 0:
+         raise HTTPException(status_code=400, detail="Point too much.")
+    return {"amount":amt}
