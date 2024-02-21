@@ -60,9 +60,9 @@ async def get_rewardpts(
     db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
 ):
     #members = db.query(User).all()
-    count = db.query(PointLogs).filter(PointLogs.status=="Reward",or_(PointLogs.shop==shop,PointLogs.shop=="ibaradmin")).count()
+    count = db.query(PointLogs).filter(PointLogs.status=="Reward",or_(PointLogs.shop==shop,PointLogs.shop=="admin")).count()
     meta_data =  pagination(page,per_page,count)
-    transition = db.query(PointLogs).filter(PointLogs.status=="Reward",or_(PointLogs.shop==shop,PointLogs.shop=="ibaradmin")).order_by(desc(PointLogs.createdate)).limit(per_page).offset((page - 1) * per_page).all()
+    transition = db.query(PointLogs).filter(PointLogs.status=="Reward",or_(PointLogs.shop==shop,PointLogs.shop=="admin")).order_by(desc(PointLogs.createdate)).limit(per_page).offset((page - 1) * per_page).all()
     return {"rewardpt":transition,"meta":meta_data}
 
 
