@@ -79,7 +79,7 @@ def create_app():
                 "higher": 10000,
                 "percentage": 1,
                 "description": "Silver User",
-                "unit":10,
+                "unit":1,
                 "postImage": [],
             },
             {
@@ -88,7 +88,7 @@ def create_app():
                 "higher": 20000,
                 "percentage": 2,
                 "description": "gold User",
-                "unit":20,
+                "unit":1,
                 "postImage": [],
             },
             {
@@ -97,7 +97,7 @@ def create_app():
                 "higher": 30000,
                 "percentage": 3,
                 "description": "Platinum User",
-                "unit":30,
+                "unit":1,
                 "postImage": [],
             },
         ]
