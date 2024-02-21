@@ -20,8 +20,17 @@ from datetime import datetime, date
 from uuid import uuid4
 from pydantic import parse_obj_as
 import json
+import psycopg2
 router = APIRouter()
 auth_handler = AuthToken()
+
+from configs.setting import Settings
+
+settings = Settings()
+
+conn = psycopg2.connect(host=settings._dbhost, dbname=settings._dbname, user=settings._dbuser, password=settings._dbpass)
+cursor = conn.cursor()
+conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
 
 
 @router.get("/reservations", tags=["reservation"], response_model=Dict[str,List[ReserveSchema]])
@@ -62,8 +71,9 @@ async def add_reservation(
     #for eventsource
     evt_data = json.dumps(parse_obj_as(TablesSchema,tables).dict(), default=str)
     logger.info(evt_data)
-    db.execute(text("SELECT pg_notify(:channel, :data)").bindparams(channel="match_updates", data=evt_data))
-    db.commit()
+    #db.execute(text("SELECT pg_notify(:channel, :data)").bindparams(channel="match_updates", data=evt_data))
+    #db.commit()
+    cursor.execute(f"NOTIFY match_updates, '{evt_data}';")
     ###
     db.refresh(order)
     return {"reservation":order}
