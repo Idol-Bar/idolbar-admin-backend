@@ -13,7 +13,7 @@ from sqlalchemy.orm import Session
 from modules.dependency import get_current_user
 from modules.token import AuthToken
 from modules.utils import pagination
-from sqlalchemy import desc,or_
+from sqlalchemy import desc,or_,func
 router = APIRouter()
 auth_handler = AuthToken()
 
@@ -68,8 +68,14 @@ async def get_rewardpts(
 
 
 @router.get("/searchtransitions", tags=["transition"])
-def search_client(phoneno: str = None,shop: str = "shop1", db: Session = Depends(get_db)):
-    if not phoneno or not len(phoneno)>0:
-        return {"searchclient":[]}
-    transition = db.query(PointLogs).filter(PointLogs.phoneno.contains(phoneno),PointLogs.shop==shop).all()
-    return {"searchtransition":transition}
+def search_client(phoneno: str = None,createdate:str =None,status: str = "Reward",shop: str = "shop1", db: Session = Depends(get_db)):
+    #if not phoneno or not len(phoneno)>0:
+    #    return {"searchclient":[]}
+    if phoneno:
+        transition = db.query(PointLogs).filter(PointLogs.phoneno.contains(phoneno),or_(PointLogs.shop==shop,PointLogs.shop=="admin"),PointLogs.status==status).all()
+        return {"searchtransition":transition}
+    elif createdate:
+        transition = db.query(PointLogs).filter(func.date(PointLogs.createdate)==createdate,or_(PointLogs.shop==shop,PointLogs.shop=="admin"),PointLogs.status==status).all()
+        return {"searchtransition":transition}
+    else:
+        return {"searchtransition":[]}
