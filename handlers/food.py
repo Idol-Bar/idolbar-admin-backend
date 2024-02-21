@@ -22,12 +22,12 @@ auth_handler = AuthToken()
 
 @router.get("/foods", tags=["food"],response_model=FoodSchemaWithMeta)
 async def get_food(
-page: int = 1 , per_page: int=12,
+page: int = 1 , per_page: int=12,shop:str ="shop1",
     db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
 ):
-    count = db.query(FoodModel).count()
+    count = db.query(FoodModel).filter(FoodModel.shop==shop).count()
     meta_data =  pagination(page,per_page,count)
-    post_data = db.query(FoodModel).order_by(desc(FoodModel.createdate)).limit(per_page).offset((page - 1) * per_page).all()
+    post_data = db.query(FoodModel).filter(FoodModel.shop==shop).order_by(desc(FoodModel.createdate)).limit(per_page).offset((page - 1) * per_page).all()
 
     return {"food":post_data,"meta":meta_data}
 

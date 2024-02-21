@@ -66,8 +66,35 @@ def get_point_byid(id: int, db: Session = Depends(get_db)):
 #     return {"searchclients":[]}
 
 @router.get("/searchclients", tags=["client"])
-def search_client(phoneno: str = None, db: Session = Depends(get_db)):
-    if not phoneno or not len(phoneno)>0:
+def search_client(phoneno: str = None,createdate:str =None, db: Session = Depends(get_db)):
+    #if not phoneno or not len(phoneno)>0:
+    #    return {"searchclient":[]}
+    if phoneno:
+        client = db.query(EndUser).filter(EndUser.phoneno.contains(phoneno)).all()
+        return {"searchclient":client}
+    elif createdate:
+        client = db.query(EndUser).filter(func.date(EndUser.createdate)==createdate).all()
+        return {"searchclient":client}
+    else:
         return {"searchclient":[]}
-    client = db.query(EndUser).filter(EndUser.phoneno.contains(phoneno)).all()
-    return {"searchclient":client}
+
+@router.get("/updateTier", tags=["client"])
+async def update_tier(
+    userId: int,db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
+):
+    db_client = db.query(EndUser).get(userId)
+    if not db_client:
+        raise HTTPException(status_code=404, detail="Customer ID not found.")
+    money = db.query(func.sum(Money.amount)).filter(Money.user_id == str(userId)).scalar()
+    unit = money if money is not None else 0
+    tier_rule = db.query(TierRule).filter(and_(TierRule.lower <= unit, TierRule.higher >= unit)).first()
+    user_tier = tier_rule.name if tier_rule else "Unavaliable"
+    
+    if  user_tier!="silver":
+        raise HTTPException(status_code=404, detail="You are not silver tier.")
+    silver_rule = db.query(TierRule).filter(TierRule.name=="silver").first()
+    require_amt = (silver_rule.higher+1) - unit
+    money_log = Money(amount=require_amt,user_id=userId,status=f"Admin add amount {require_amt} MMK ")
+    db.add(money_log)
+    db.commit()
+    return {"status":"success"}
