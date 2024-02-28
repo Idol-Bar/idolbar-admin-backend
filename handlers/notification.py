@@ -8,7 +8,7 @@ from models.schema import (
 )
 from typing import List, Dict
 from .database import get_db
-from models.model import NotiModel
+from models.model import NotiModel,AdminNotiModel
 from sqlalchemy.orm import Session
 from modules.dependency import get_current_user
 from modules.token import AuthToken
@@ -57,3 +57,14 @@ async def delete_noti(_id: int, db: Session = Depends(get_db)):
     db.delete(notification)
     db.commit()
     return {"message": "Notification has been deleted succesfully"}
+
+
+@router.get("/notimanagers", tags=["notification"])#, response_model=Dict[str,List[GetNotiSchema]])
+async def get_admin_noti(
+    page: int = 1 , per_page: int=10,shop:str="shop1",
+    db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
+):
+    count = db.query(AdminNotiModel).filter(AdminNotiModel.shop==shop).count()
+    meta_data =  pagination(page,per_page,count)
+    notification = db.query(AdminNotiModel).filter(AdminNotiModel.shop==shop).order_by(desc(AdminNotiModel.createdate)).limit(per_page).offset((page - 1) * per_page).all()
+    return {"notimanager":notification,"meta":meta_data}
