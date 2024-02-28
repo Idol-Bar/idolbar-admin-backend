@@ -208,11 +208,19 @@ class CreateTableSchema(OrmBase):
 class CreateTableSchemaRequest(BaseModel):
     restable: CreateTableSchema
 
+class TablesWithReserveSchema(OrmBase):
+    name: str
+    reservedate: date
+    createdate: datetime
+    reservation_id:int
+    reservation:Any
+
 class TablesSchema(OrmBase):
     name: str
     reservedate: date
     createdate: datetime
     reservation_id:int
+    #reservation:Any
 
 class ReserveSchema(OrmBase):
     username: str
@@ -221,7 +229,7 @@ class ReserveSchema(OrmBase):
     reservedate: date
     reservetime: time
     description: str
-    status: bool
+    status: str
     active: Optional[bool] = False
     tables: List[TablesSchema]  = []
 
@@ -236,7 +244,7 @@ class CreateReserveSchema(OrmBase):
     reservedate: date
     reservetime: time
     description: str
-    status: Optional[bool] = True
+    status: Optional[str] = "Confirm"
     active: Optional[bool] = True
     tables: List
 
