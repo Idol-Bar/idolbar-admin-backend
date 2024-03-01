@@ -231,6 +231,7 @@ class ReserveSchema(OrmBase):
     description: str
     status: str
     active: Optional[bool] = False
+    shop:Optional[str] = "shop1"
     tables: List[TablesSchema]  = []
 
     class Config:

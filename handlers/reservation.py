@@ -78,6 +78,17 @@ async def add_reservation(
     db.refresh(order)
     return {"reservation":order}
 
+@router.put("/reservations/{id}", tags=["reservation"], response_model=Dict[str,ReserveSchema])
+async def update_reservations(id: int, data: CreateReserveSchemaRequest,db: Session = Depends(get_db)):
+    db_reserve = db.query(Reservation).get(id)
+    if not db_reserve:
+        raise HTTPException(status_code=404, detail="Reservation ID not found.")
+    db_reserve.status =  data.reservation.status
+    db.commit()
+    db.refresh(db_reserve)
+    return {"reservation":db_reserve}
+
+
 @router.get("/reservations/{id}", tags=["reservation"], response_model=Dict[str,ReserveSchema])
 def get_reservation_byid(id: int, db: Session = Depends(get_db)):
     reservation = db.get(Reservation, id)
