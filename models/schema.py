@@ -442,7 +442,7 @@ class OrderItemSchema(BaseModel):
     food_id: Optional[int]=0
     quantity: Optional[int]=0
     food: GetFoodSchema
-
+    description: Optional[str] = ""
     class Config:
         orm_mode = True
 
@@ -458,6 +458,7 @@ class GetOrder(BaseModel):
     shop: Optional[str] = "shop1"
     tables:str
     reservedate:date
+    reservation:Any
     order_items: Optional[List[OrderItemSchema]] = None
 
     class Config:

@@ -68,3 +68,21 @@ async def get_admin_noti(
     meta_data =  pagination(page,per_page,count)
     notification = db.query(AdminNotiModel).filter(AdminNotiModel.shop==shop).order_by(desc(AdminNotiModel.createdate)).limit(per_page).offset((page - 1) * per_page).all()
     return {"notimanager":notification,"meta":meta_data}
+
+@router.get("/notimanagers/{id}", tags=["notification"])
+def get_admin_noti_byid(id: int, db: Session = Depends(get_db)):
+    notimanager = db.get(AdminNotiModel, id)
+    if not notimanager:
+        raise HTTPException(status_code=404, detail="Notification ID not found.")
+    return {"notimanager":notimanager}
+
+
+@router.put("/notimanagers/{id}", tags=["notification"])
+async def admin_noti_seen(id: int,db: Session = Depends(get_db)):
+    db_noti = db.query(AdminNotiModel).get(id)
+    if not db_noti:
+        raise HTTPException(status_code=404, detail="Noti ID not found.")
+    db_noti.read =  True
+    db.commit()
+    db.refresh(db_noti)
+    return {"notimanager":db_noti}
