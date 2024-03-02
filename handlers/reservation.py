@@ -63,8 +63,8 @@ async def add_reservation(
     if is_reserved:
         raise HTTPException(status_code=400, detail="Reservation already registered.")
     tables = Tables(name=data.tables[0],reservedate=data.reservedate,shop=data.shop)
-    order = Reservation(username=data.username, phoneno=data.phoneno,reservedate=data.reservedate,reservetime=data.reservetime,
-                    description=data.description,status=data.status,active=True,tables=[tables])
+    order = Reservation(username=data.username, phoneno=data.phoneno,reservedate=data.reservedate,reservetime=data.reservetime,status="Confirm",
+                    description=data.description,active=True,tables=[tables])
     db.add(order)
     db.add(tables)
     db.commit()
