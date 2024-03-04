@@ -6,7 +6,7 @@ from models.schema import (
     ReserveSchema,
     CreateReserveSchemaRequest,
     TablesSchema,
-    CreateTableSchemaRequest,TablesWithReserveSchema
+    CreateTableSchemaRequest,TablesWithReserveSchema,ReserveWithOrdersSchema
 )
 from typing import List, Dict
 from .database import get_db
@@ -89,7 +89,7 @@ async def update_reservations(id: int, data: CreateReserveSchemaRequest,db: Sess
     return {"reservation":db_reserve}
 
 
-@router.get("/reservations/{id}", tags=["reservation"], response_model=Dict[str,ReserveSchema])
+@router.get("/reservations/{id}", tags=["reservation"], response_model=Dict[str,ReserveWithOrdersSchema])
 def get_reservation_byid(id: int, db: Session = Depends(get_db)):
     reservation = db.get(Reservation, id)
     if not reservation:
