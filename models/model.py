@@ -262,7 +262,7 @@ class NotiModel(Base):
     tier = Column(String, nullable=False)
     description = Column(String, nullable=False)
     createdate = Column(DateTime, default=datetime.datetime.now)
-    read = Column(Boolean,default=False)
+
 
 class FaqModel(Base):
     __tablename__ = "faq"
