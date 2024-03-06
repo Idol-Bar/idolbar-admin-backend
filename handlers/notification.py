@@ -86,3 +86,11 @@ async def admin_noti_seen(id: int,db: Session = Depends(get_db)):
     db.commit()
     db.refresh(db_noti)
     return {"notimanager":db_noti}
+
+
+@router.get("/getNotiCount", tags=["notification"])
+async def get_noti_count(
+     db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
+):
+    count = db.query(AdminNotiModel).filter(AdminNotiModel.read==False).count()
+    return {"count":count}
