@@ -600,3 +600,32 @@ class UpdateParcelStatus(BaseModel):
 class GetParcelSearchSchemaWithMeta(BaseModel):
     parcelSearch: List[GetParcel] = []
     meta : MetaSchema
+
+
+class GetReserveOrder(BaseModel):
+    id: Optional[int]
+    createdate: datetime
+    payment: str
+    postImage: Optional[List] = []
+    user_id: int
+    status: str
+    description: str
+    order_items: Optional[List[OrderItemSchema]] = None
+    shop: Optional[str] = "shop1"
+    class Config:
+        orm_mode = True
+
+
+class ReserveWithOrdersSchema(OrmBase):
+    username: str
+    phoneno: str
+    createdate: datetime
+    reservedate: date
+    reservetime: time
+    description: str
+    status: str
+    active: Optional[bool] = False
+    tables: List[TablesSchema]  = []
+    orders: Optional[List[GetReserveOrder]] = None
+    class Config:
+        orm_mode = True

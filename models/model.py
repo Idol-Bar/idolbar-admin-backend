@@ -263,6 +263,7 @@ class NotiModel(Base):
     description = Column(String, nullable=False)
     createdate = Column(DateTime, default=datetime.datetime.now)
 
+
 class FaqModel(Base):
     __tablename__ = "faq"
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
