@@ -25,10 +25,11 @@ auth_handler = AuthToken()
 
 @router.get("/orderSearches", tags=["parcel"],response_model=GetOrderSearchSchemaWithMeta)#, response_model=Dict[str,List[GetOrder]])
 async def search_orders(
-   reservedate:date = date.today(),
+   reservedate:date = date.today(),status:str="Pending",
     db: Session = Depends(get_db), current_user: CurrentUser = Depends(get_current_user)
 ):
-    order_data = db.query(Order).filter(func.date(Order.createdate)==reservedate,Order.tables!="parcel").order_by(desc(Order.createdate)).all()
+    status = status.capitalize()
+    order_data = db.query(Order).filter(func.date(Order.createdate)==reservedate,Order.tables!="parcel",Order.status==status).order_by(desc(Order.createdate)).all()
     return {"orderSearch":order_data,"meta":{"total_pages":1}}
 
 @router.get("/orderDetails", tags=["order"], response_model=Dict[str,List[GetOrder]])
