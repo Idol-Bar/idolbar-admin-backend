@@ -46,7 +46,7 @@ def create_app():
     app.include_router(transition.router,dependencies=[Depends(AuthHandler)])
     app.include_router(report.router,dependencies=[Depends(AuthHandler)])
     app.include_router(reservation.router,dependencies=[Depends(AuthHandler)])
-    app.include_router(evtsource.router,dependencies=[Depends(AuthHandler)])
+    app.include_router(evtsource.router)#,dependencies=[Depends(AuthHandler)])
     app.include_router(banner.router,dependencies=[Depends(AuthHandler)])
     app.include_router(post.router,dependencies=[Depends(AuthHandler)])
     app.include_router(category.router,dependencies=[Depends(AuthHandler)])
