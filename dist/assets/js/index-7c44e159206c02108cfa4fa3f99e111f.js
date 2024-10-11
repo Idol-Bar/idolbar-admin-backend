@@ -1,0 +1,1 @@
+document.addEventListener("deviceready",(async()=>{try{FirebasePlugin.subscribe("mmlottery",(function(){console.log("Subscribed to topic mmlottery")}),(function(o){console.error("Error subscribing to topic: "+o)})),console.log("Finish to topic")}catch(o){console.log(o)}}),!1),document.addEventListener("admob.ad.show",(async o=>{o.ad,admob.AppOpenAd}))

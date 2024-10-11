@@ -11,7 +11,7 @@ public
 bin/
 build/
 develop-eggs/
-dist/
+#dist/
 eggs/
 lib/
 lib64/
@@ -53,4 +53,4 @@ docs/_build/
 
 .DS_Store
 node_modules
-dist/
+#dist/
